@@ -6,7 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { money, ORDER_SELECT, type OrderStatus } from "@/lib/orders";
+import { money, ORDER_SELECT } from "@/lib/orders";
+import { setStatus } from "@/lib/order-actions";
 import { OrderCard, type OrderRow } from "@/components/OrderCard";
 
 export const Route = createFileRoute("/_authenticated/warehouse")({
@@ -14,10 +15,6 @@ export const Route = createFileRoute("/_authenticated/warehouse")({
   component: WarehousePage,
 });
 
-export async function setStatus(id: string, status: OrderStatus) {
-  const { error } = await supabase.from("orders").update({ status }).eq("id", id);
-  if (error) toast.error(error.message);
-}
 
 function WarehousePage() {
   const qc = useQueryClient();
