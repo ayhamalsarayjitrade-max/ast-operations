@@ -1,0 +1,151 @@
+import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { LayoutDashboard, MapPinned, Warehouse, Truck, Navigation, Users, LogOut, Bell } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useMe, hasRole } from "@/lib/auth";
+import { notify, askNotificationPermission, unlockAudio } from "@/lib/notify";
+import { STATUS_LABEL, ROLE_LABEL, type AppRole, type OrderStatus } from "@/lib/orders";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+
+export const Route = createFileRoute("/_authenticated")({
+  ssr: false,
+  beforeLoad: async () => {
+    const { data } = await supabase.auth.getUser();
+    if (!data.user) throw redirect({ to: "/auth" });
+  },
+  component: Layout,
+});
+
+const NAV: { to: string; label: string; icon: any; roles: AppRole[] }[] = [
+  { to: "/dashboard", label: "الرئيسية", icon: LayoutDashboard, roles: ["rep", "warehouse", "driver"] },
+  { to: "/rep", label: "المندوب", icon: MapPinned, roles: ["rep"] },
+  { to: "/warehouse", label: "المستودع", icon: Warehouse, roles: ["warehouse"] },
+  { to: "/dispatch", label: "الإسناد والتتبع", icon: Navigation, roles: ["warehouse"] },
+  { to: "/driver", label: "السائق", icon: Truck, roles: ["driver"] },
+  { to: "/team", label: "الفريق", icon: Users, roles: [] },
+];
+
+function Layout() {
+  const { data: me } = useMe();
+  const qc = useQueryClient();
+  const nav = useNavigate();
+  const meRef = useRef(me);
+  meRef.current = me;
+
+  useEffect(() => {
+    const unlock = () => unlockAudio();
+    window.addEventListener("pointerdown", unlock, { once: true });
+    const ch = supabase
+      .channel("live-all")
+      .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, (p) => {
+        qc.invalidateQueries({ queryKey: ["orders"] });
+        qc.invalidateQueries({ queryKey: ["products"] });
+        const m = meRef.current;
+        if (!m) return;
+        const n: any = p.new;
+        const o: any = p.old;
+        if (p.eventType === "INSERT" && hasRole(m, "warehouse")) {
+          notify("طلب جديد", `طلب #${n.number} بانتظار التجهيز`, "alert");
+        } else if (p.eventType === "UPDATE") {
+          if (n.driver_id === m.id && o?.driver_id !== m.id) {
+            notify("طلب مسند إليك", `طلب #${n.number} — راجع تفاصيل التسليم`, "alert");
+          } else if (n.status !== o?.status && n.status) {
+            const s = n.status as OrderStatus;
+            if (n.rep_id === m.id || hasRole(m, "warehouse")) {
+              notify(`طلب #${n.number}`, `الحالة: ${STATUS_LABEL[s]}`, s === "delivered" ? "success" : "info");
+            }
+          }
+        }
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "driver_locations" }, () =>
+        qc.invalidateQueries({ queryKey: ["driver_locations"] }),
+      )
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "visits" }, () =>
+        qc.invalidateQueries({ queryKey: ["visits"] }),
+      )
+      .on("postgres_changes", { event: "*", schema: "public", table: "products" }, () =>
+        qc.invalidateQueries({ queryKey: ["products"] }),
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(ch);
+      window.removeEventListener("pointerdown", unlock);
+    };
+  }, [qc]);
+
+  async function enableNotifs() {
+    const r = await askNotificationPermission();
+    if (r === "granted") notify("الإشعارات مفعّلة", "ستصلك التنبيهات الصوتية والمرئية", "success");
+    else if (r === "iframe") toast.info("افتح التطبيق في نافذة مستقلة لتفعيل إشعارات المتصفح. الأصوات تعمل الآن.");
+    else toast.error("الإشعارات مرفوضة — فعّلها من إعدادات المتصفح");
+  }
+
+  const items = NAV.filter((n) => hasRole(me, ...n.roles));
+
+  return (
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-30 border-b bg-card/90 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
+          <div className="font-bold text-primary">ميدان</div>
+          <nav className="hidden flex-1 gap-1 md:flex">
+            {items.map((n) => (
+              <Link
+                key={n.to}
+                to={n.to as any}
+                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted"
+                activeProps={{ className: "bg-secondary text-secondary-foreground font-semibold" }}
+              >
+                <n.icon className="h-4 w-4" />
+                {n.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="mr-auto flex items-center gap-2 md:mr-0">
+            <span className="hidden text-sm text-muted-foreground sm:inline">
+              {me?.name} {me?.roles.length ? `· ${me.roles.map((r) => ROLE_LABEL[r]).join("، ")}` : ""}
+            </span>
+            <Button size="icon" variant="ghost" onClick={enableNotifs} aria-label="تفعيل الإشعارات">
+              <Bell className="h-4 w-4" />
+            </Button>
+            <Button
+              size="icon"
+              variant="ghost"
+              aria-label="خروج"
+              onClick={async () => {
+                await supabase.auth.signOut();
+                nav({ to: "/auth" });
+              }}
+            >
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </header>
+      <main className="mx-auto max-w-6xl px-4 py-6 pb-24 md:pb-6">
+        {me && me.roles.length === 0 ? (
+          <div className="rounded-xl border bg-card p-8 text-center">
+            <h2 className="text-xl font-bold">بانتظار تحديد الصلاحية</h2>
+            <p className="mt-2 text-muted-foreground">اطلب من المدير تعيين دورك (مندوب، مستودع، سائق).</p>
+          </div>
+        ) : (
+          <Outlet />
+        )}
+      </main>
+      <nav className="fixed inset-x-0 bottom-0 z-30 flex justify-around border-t bg-card py-2 md:hidden">
+        {items.map((n) => (
+          <Link
+            key={n.to}
+            to={n.to as any}
+            className="flex flex-col items-center gap-0.5 px-2 text-[11px] text-muted-foreground"
+            activeProps={{ className: "text-primary font-semibold" }}
+          >
+            <n.icon className="h-5 w-5" />
+            {n.label}
+          </Link>
+        ))}
+      </nav>
+    </div>
+  );
+}
