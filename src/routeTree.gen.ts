@@ -12,8 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDispatchRouteImport } from './routes/_authenticated/dispatch'
+import { Route as AuthenticatedDriverRouteImport } from './routes/_authenticated/driver'
 import { Route as AuthenticatedRepRouteImport } from './routes/_authenticated/rep'
+import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as AuthenticatedWarehouseRouteImport } from './routes/_authenticated/warehouse'
 
 const IndexRoute = IndexRouteImport.update({
@@ -30,14 +33,29 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDispatchRoute = AuthenticatedDispatchRouteImport.update({
   id: '/dispatch',
   path: '/dispatch',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDriverRoute = AuthenticatedDriverRouteImport.update({
+  id: '/driver',
+  path: '/driver',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRepRoute = AuthenticatedRepRouteImport.update({
   id: '/rep',
   path: '/rep',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTeamRoute = AuthenticatedTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedWarehouseRoute = AuthenticatedWarehouseRouteImport.update({
@@ -49,15 +67,21 @@ const AuthenticatedWarehouseRoute = AuthenticatedWarehouseRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/dispatch': typeof AuthenticatedDispatchRoute
+  '/driver': typeof AuthenticatedDriverRoute
   '/rep': typeof AuthenticatedRepRoute
+  '/team': typeof AuthenticatedTeamRoute
   '/warehouse': typeof AuthenticatedWarehouseRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/dispatch': typeof AuthenticatedDispatchRoute
+  '/driver': typeof AuthenticatedDriverRoute
   '/rep': typeof AuthenticatedRepRoute
+  '/team': typeof AuthenticatedTeamRoute
   '/warehouse': typeof AuthenticatedWarehouseRoute
 }
 export interface FileRoutesById {
@@ -65,22 +89,44 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/dispatch': typeof AuthenticatedDispatchRoute
+  '/_authenticated/driver': typeof AuthenticatedDriverRoute
   '/_authenticated/rep': typeof AuthenticatedRepRoute
+  '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/warehouse': typeof AuthenticatedWarehouseRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dispatch' | '/rep' | '/warehouse'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/dispatch'
+    | '/driver'
+    | '/rep'
+    | '/team'
+    | '/warehouse'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dispatch' | '/rep' | '/warehouse'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/dispatch'
+    | '/driver'
+    | '/rep'
+    | '/team'
+    | '/warehouse'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/dashboard'
     | '/_authenticated/dispatch'
+    | '/_authenticated/driver'
     | '/_authenticated/rep'
+    | '/_authenticated/team'
     | '/_authenticated/warehouse'
   fileRoutesById: FileRoutesById
 }
@@ -113,6 +159,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dispatch': {
       id: '/_authenticated/dispatch'
       path: '/dispatch'
@@ -120,11 +173,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDispatchRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/driver': {
+      id: '/_authenticated/driver'
+      path: '/driver'
+      fullPath: '/driver'
+      preLoaderRoute: typeof AuthenticatedDriverRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/rep': {
       id: '/_authenticated/rep'
       path: '/rep'
       fullPath: '/rep'
       preLoaderRoute: typeof AuthenticatedRepRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/team': {
+      id: '/_authenticated/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof AuthenticatedTeamRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/warehouse': {
@@ -138,14 +205,20 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDispatchRoute: typeof AuthenticatedDispatchRoute
+  AuthenticatedDriverRoute: typeof AuthenticatedDriverRoute
   AuthenticatedRepRoute: typeof AuthenticatedRepRoute
+  AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
   AuthenticatedWarehouseRoute: typeof AuthenticatedWarehouseRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDispatchRoute: AuthenticatedDispatchRoute,
+  AuthenticatedDriverRoute: AuthenticatedDriverRoute,
   AuthenticatedRepRoute: AuthenticatedRepRoute,
+  AuthenticatedTeamRoute: AuthenticatedTeamRoute,
   AuthenticatedWarehouseRoute: AuthenticatedWarehouseRoute,
 }
 
