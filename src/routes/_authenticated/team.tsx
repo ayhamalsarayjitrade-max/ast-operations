@@ -23,7 +23,7 @@ function TeamPage() {
 
   async function toggle(uid: string, role: AppRole, on: boolean) {
     const { error } = await supabase.rpc("set_user_role", { _user_id: uid, _role: role, _enabled: on });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["staff"] });
   }
 

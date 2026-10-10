@@ -34,7 +34,7 @@ function WarehousePage() {
   async function addProduct(e: React.FormEvent) {
     e.preventDefault();
     const { error } = await supabase.from("products").insert({ name: p.name, sku: p.sku || null, unit: p.unit, price: Number(p.price || 0) });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("تمت إضافة المنتج");
     setP({ name: "", sku: "", unit: "قطعة", price: "" });
     qc.invalidateQueries({ queryKey: ["products"] });
@@ -44,7 +44,7 @@ function WarehousePage() {
     const qty = Number(stockIn[id]);
     if (!qty) return;
     const { error } = await supabase.from("stock_movements").insert({ product_id: id, qty, note: "إدخال مخزون" });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("تم تحديث المخزون");
     setStockIn({ ...stockIn, [id]: "" });
     qc.invalidateQueries({ queryKey: ["products"] });

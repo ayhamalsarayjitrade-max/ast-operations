@@ -60,7 +60,7 @@ function RepPage() {
   const total = items.reduce((s, it) => s + it.qty * Number(products.find((p) => p.id === it.product_id)?.price ?? 0), 0);
 
   function locate() {
-    if (!navigator.geolocation) return toast.error("الموقع غير مدعوم");
+    if (!navigator.geolocation) { toast.error("الموقع غير مدعوم"); return; }
     navigator.geolocation.getCurrentPosition(
       (p) => {
         setLoc({ lat: p.coords.latitude, lng: p.coords.longitude });
@@ -79,9 +79,9 @@ function RepPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!me) return;
-    if (!customerId) return toast.error("اختر العميل");
-    if (!photo) return toast.error("صورة المحل مطلوبة");
-    if (hasOrder && items.filter((i) => i.product_id && i.qty > 0).length === 0) return toast.error("أضف منتجات للطلب");
+    if (!customerId) { toast.error("اختر العميل"); return; }
+    if (!photo) { toast.error("صورة المحل مطلوبة"); return; }
+    if (hasOrder && items.filter((i) => i.product_id && i.qty > 0).length === 0) { toast.error("أضف منتجات للطلب"); return; }
     setBusy(true);
     try {
       let cid = customerId;
@@ -90,7 +90,7 @@ function RepPage() {
         if (!newName || !newPhone) throw new Error("اسم ورقم العميل مطلوبان");
         const { data, error } = await supabase
           .from("customers")
-          .insert({ name: newName, phone: newPhone, address: address || null, lat: loc?.lat, lng: loc?.lng })
+          .insert({ name: newName, phone: newPhone, address: address || null, lat: loc?.lat ?? null, lng: loc?.lng ?? null })
           .select()
           .single();
         if (error) throw error;
@@ -104,7 +104,7 @@ function RepPage() {
       if (up.error) throw up.error;
       const { data: visit, error: vErr } = await supabase
         .from("visits")
-        .insert({ customer_id: cid, photo_path: path, lat: loc?.lat, lng: loc?.lng, note: note || null, has_order: hasOrder })
+        .insert({ customer_id: cid, photo_path: path, lat: loc?.lat ?? null, lng: loc?.lng ?? null, note: note || null, has_order: hasOrder })
         .select()
         .single();
       if (vErr) throw vErr;
@@ -116,8 +116,8 @@ function RepPage() {
             visit_id: visit.id,
             phone: cust?.phone ?? newPhone,
             address: address || cust?.address || null,
-            lat: loc?.lat ?? cust?.lat,
-            lng: loc?.lng ?? cust?.lng,
+            lat: loc?.lat ?? cust?.lat ?? null,
+            lng: loc?.lng ?? cust?.lng ?? null,
             delivery_at: deliveryAt ? new Date(deliveryAt).toISOString() : null,
             notes: note || null,
             total,
