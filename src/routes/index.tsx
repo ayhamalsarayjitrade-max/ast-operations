@@ -1,24 +1,50 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { MapPinned, Warehouse, Truck, BellRing } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "ميدان — المناديب والمستودعات والتوصيل" },
+      { name: "description", content: "سجّل زيارات العملاء، جهّز الطلبات من المستودع، وتابع السائقين لحظياً." },
+      { property: "og:title", content: "ميدان — المناديب والمستودعات والتوصيل" },
+      { property: "og:description", content: "سجّل زيارات العملاء، جهّز الطلبات من المستودع، وتابع السائقين لحظياً." },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+const features = [
+  { icon: MapPinned, t: "تطبيق المندوب", d: "صورة المحل، موقع العميل، والطلب بضغطة." },
+  { icon: Warehouse, t: "لوحة المستودع", d: "إدخال المنتجات والمخزون وتجهيز الطلبات." },
+  { icon: Truck, t: "التوصيل والتتبع", d: "إسناد الطلبات للسائقين وتتبع موقعهم." },
+  { icon: BellRing, t: "إشعارات لحظية", d: "تنبيهات صوتية ومرئية على كل الأجهزة." },
+];
+
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <div className="mx-auto max-w-5xl px-6 py-16">
+        <div className="text-sm font-semibold text-primary">ميدان</div>
+        <h1 className="mt-3 max-w-2xl text-4xl font-bold leading-tight md:text-5xl">
+          من زيارة المندوب حتى باب العميل — في نظام واحد لحظي.
+        </h1>
+        <p className="mt-4 max-w-xl text-lg text-muted-foreground">
+          المناديب، المستودعات، والسائقون على نفس الصفحة، مع تحديث فوري لحالة كل طلب.
+        </p>
+        <Button asChild size="lg" className="mt-8">
+          <Link to="/auth">الدخول للنظام</Link>
+        </Button>
+        <div className="mt-16 grid gap-4 sm:grid-cols-2">
+          {features.map((f) => (
+            <div key={f.t} className="rounded-xl border bg-card p-5">
+              <f.icon className="h-6 w-6 text-primary" />
+              <div className="mt-3 font-bold">{f.t}</div>
+              <div className="text-sm text-muted-foreground">{f.d}</div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
