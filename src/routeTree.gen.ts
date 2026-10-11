@@ -12,9 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedAttendanceRouteImport } from './routes/_authenticated/attendance'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDispatchRouteImport } from './routes/_authenticated/dispatch'
 import { Route as AuthenticatedDriverRouteImport } from './routes/_authenticated/driver'
+import { Route as AuthenticatedPayrollRouteImport } from './routes/_authenticated/payroll'
 import { Route as AuthenticatedRepRouteImport } from './routes/_authenticated/rep'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as AuthenticatedWarehouseRouteImport } from './routes/_authenticated/warehouse'
@@ -33,6 +35,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAttendanceRoute = AuthenticatedAttendanceRouteImport.update({
+  id: '/attendance',
+  path: '/attendance',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -46,6 +53,11 @@ const AuthenticatedDispatchRoute = AuthenticatedDispatchRouteImport.update({
 const AuthenticatedDriverRoute = AuthenticatedDriverRouteImport.update({
   id: '/driver',
   path: '/driver',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPayrollRoute = AuthenticatedPayrollRouteImport.update({
+  id: '/payroll',
+  path: '/payroll',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedRepRoute = AuthenticatedRepRouteImport.update({
@@ -67,9 +79,11 @@ const AuthenticatedWarehouseRoute = AuthenticatedWarehouseRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/attendance': typeof AuthenticatedAttendanceRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/dispatch': typeof AuthenticatedDispatchRoute
   '/driver': typeof AuthenticatedDriverRoute
+  '/payroll': typeof AuthenticatedPayrollRoute
   '/rep': typeof AuthenticatedRepRoute
   '/team': typeof AuthenticatedTeamRoute
   '/warehouse': typeof AuthenticatedWarehouseRoute
@@ -77,9 +91,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/attendance': typeof AuthenticatedAttendanceRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/dispatch': typeof AuthenticatedDispatchRoute
   '/driver': typeof AuthenticatedDriverRoute
+  '/payroll': typeof AuthenticatedPayrollRoute
   '/rep': typeof AuthenticatedRepRoute
   '/team': typeof AuthenticatedTeamRoute
   '/warehouse': typeof AuthenticatedWarehouseRoute
@@ -89,9 +105,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/attendance': typeof AuthenticatedAttendanceRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/dispatch': typeof AuthenticatedDispatchRoute
   '/_authenticated/driver': typeof AuthenticatedDriverRoute
+  '/_authenticated/payroll': typeof AuthenticatedPayrollRoute
   '/_authenticated/rep': typeof AuthenticatedRepRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/warehouse': typeof AuthenticatedWarehouseRoute
@@ -101,9 +119,11 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/attendance'
     | '/dashboard'
     | '/dispatch'
     | '/driver'
+    | '/payroll'
     | '/rep'
     | '/team'
     | '/warehouse'
@@ -111,9 +131,11 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/attendance'
     | '/dashboard'
     | '/dispatch'
     | '/driver'
+    | '/payroll'
     | '/rep'
     | '/team'
     | '/warehouse'
@@ -122,9 +144,11 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/attendance'
     | '/_authenticated/dashboard'
     | '/_authenticated/dispatch'
     | '/_authenticated/driver'
+    | '/_authenticated/payroll'
     | '/_authenticated/rep'
     | '/_authenticated/team'
     | '/_authenticated/warehouse'
@@ -159,6 +183,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/attendance': {
+      id: '/_authenticated/attendance'
+      path: '/attendance'
+      fullPath: '/attendance'
+      preLoaderRoute: typeof AuthenticatedAttendanceRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -178,6 +209,13 @@ declare module '@tanstack/react-router' {
       path: '/driver'
       fullPath: '/driver'
       preLoaderRoute: typeof AuthenticatedDriverRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/payroll': {
+      id: '/_authenticated/payroll'
+      path: '/payroll'
+      fullPath: '/payroll'
+      preLoaderRoute: typeof AuthenticatedPayrollRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/rep': {
@@ -205,18 +243,22 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAttendanceRoute: typeof AuthenticatedAttendanceRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDispatchRoute: typeof AuthenticatedDispatchRoute
   AuthenticatedDriverRoute: typeof AuthenticatedDriverRoute
+  AuthenticatedPayrollRoute: typeof AuthenticatedPayrollRoute
   AuthenticatedRepRoute: typeof AuthenticatedRepRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
   AuthenticatedWarehouseRoute: typeof AuthenticatedWarehouseRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAttendanceRoute: AuthenticatedAttendanceRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDispatchRoute: AuthenticatedDispatchRoute,
   AuthenticatedDriverRoute: AuthenticatedDriverRoute,
+  AuthenticatedPayrollRoute: AuthenticatedPayrollRoute,
   AuthenticatedRepRoute: AuthenticatedRepRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,
   AuthenticatedWarehouseRoute: AuthenticatedWarehouseRoute,

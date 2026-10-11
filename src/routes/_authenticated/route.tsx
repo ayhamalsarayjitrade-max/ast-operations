@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { LayoutDashboard, MapPinned, Warehouse, Truck, Navigation, Users, LogOut, Bell } from "lucide-react";
+import { LayoutDashboard, MapPinned, Warehouse, Truck, Navigation, Users, LogOut, Bell, Clock, Wallet } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe, hasRole } from "@/lib/auth";
 import { notify, askNotificationPermission, unlockAudio } from "@/lib/notify";
@@ -24,6 +24,8 @@ const NAV: { to: string; label: string; icon: any; roles: AppRole[] }[] = [
   { to: "/warehouse", label: "المستودع", icon: Warehouse, roles: ["warehouse"] },
   { to: "/dispatch", label: "الإسناد والتتبع", icon: Navigation, roles: ["warehouse"] },
   { to: "/driver", label: "السائق", icon: Truck, roles: ["driver"] },
+  { to: "/attendance", label: "الحضور", icon: Clock, roles: ["rep", "warehouse", "driver"] },
+  { to: "/payroll", label: "الرواتب", icon: Wallet, roles: [] },
   { to: "/team", label: "الفريق", icon: Users, roles: [] },
 ];
 
@@ -68,6 +70,17 @@ function Layout() {
       .on("postgres_changes", { event: "*", schema: "public", table: "products" }, () =>
         qc.invalidateQueries({ queryKey: ["products"] }),
       )
+      .on("postgres_changes", { event: "*", schema: "public", table: "attendance" }, () =>
+        qc.invalidateQueries({ queryKey: ["attendance"] }),
+      )
+      .on("postgres_changes", { event: "*", schema: "public", table: "leaves" }, (p) => {
+        qc.invalidateQueries({ queryKey: ["attendance"] });
+        const m = meRef.current;
+        const n: any = p.new;
+        if (!m) return;
+        if (p.eventType === "INSERT" && m.roles.includes("admin")) notify("طلب إجازة جديد", "راجع صفحة الرواتب", "alert");
+        else if (p.eventType === "UPDATE" && n.user_id === m.id) notify("تحديث طلب الإجازة", n.status === "approved" ? "تم قبول إجازتك" : "تم رفض إجازتك", n.status === "approved" ? "success" : "info");
+      })
       .subscribe();
     return () => {
       supabase.removeChannel(ch);
