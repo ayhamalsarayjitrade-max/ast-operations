@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      attendance: {
+        Row: {
+          check_in: string
+          check_out: string | null
+          id: string
+          in_lat: number | null
+          in_lng: number | null
+          note: string | null
+          out_lat: number | null
+          out_lng: number | null
+          user_id: string
+        }
+        Insert: {
+          check_in?: string
+          check_out?: string | null
+          id?: string
+          in_lat?: number | null
+          in_lng?: number | null
+          note?: string | null
+          out_lat?: number | null
+          out_lng?: number | null
+          user_id?: string
+        }
+        Update: {
+          check_in?: string
+          check_out?: string | null
+          id?: string
+          in_lat?: number | null
+          in_lng?: number | null
+          note?: string | null
+          out_lat?: number | null
+          out_lng?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           address: string | null
@@ -65,6 +101,81 @@ export type Database = {
           lat?: number
           lng?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      employee_pay: {
+        Row: {
+          base_salary: number
+          daily_hours: number
+          housing_allowance: number
+          other_allowance: number
+          overtime_rate: number
+          shift_start: string
+          transport_allowance: number
+          updated_at: string
+          user_id: string
+          work_days: number
+        }
+        Insert: {
+          base_salary?: number
+          daily_hours?: number
+          housing_allowance?: number
+          other_allowance?: number
+          overtime_rate?: number
+          shift_start?: string
+          transport_allowance?: number
+          updated_at?: string
+          user_id: string
+          work_days?: number
+        }
+        Update: {
+          base_salary?: number
+          daily_hours?: number
+          housing_allowance?: number
+          other_allowance?: number
+          overtime_rate?: number
+          shift_start?: string
+          transport_allowance?: number
+          updated_at?: string
+          user_id?: string
+          work_days?: number
+        }
+        Relationships: []
+      }
+      leaves: {
+        Row: {
+          created_at: string
+          end_date: string
+          id: string
+          kind: string
+          paid: boolean
+          reason: string | null
+          start_date: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          id?: string
+          kind?: string
+          paid?: boolean
+          reason?: string | null
+          start_date: string
+          status?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          id?: string
+          kind?: string
+          paid?: boolean
+          reason?: string | null
+          start_date?: string
+          status?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -210,6 +321,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      pay_adjustments: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          month: string
+          note: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind: string
+          month: string
+          note?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          month?: string
+          note?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       products: {
         Row: {
