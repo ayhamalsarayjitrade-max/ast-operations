@@ -11,7 +11,7 @@ export const LEAVE_LABEL: Record<string, string> = { annual: "سنوية", sick:
 export const LEAVE_STATUS: Record<string, string> = { pending: "قيد المراجعة", approved: "مقبولة", rejected: "مرفوضة" };
 
 export const monthRange = (m: string) => {
-  const [y, mo] = m.split("-").map(Number);
+  const [y = 2026, mo = 1] = m.split("-").map(Number);
   return { start: new Date(y, mo - 1, 1), end: new Date(y, mo, 1) };
 };
 export const curMonth = () => new Date().toISOString().slice(0, 7);
@@ -33,7 +33,7 @@ export function calcPayroll(month: string, p: Partial<Pay> | undefined, att: Att
   const expectedDays = Math.round((pay.work_days * elapsed) / dim);
   const dayRate = pay.base_salary / (pay.work_days || 1);
   const hourRate = dayRate / (pay.daily_hours || 1);
-  const [sh, sm] = pay.shift_start.split(":").map(Number);
+  const [sh = 8, sm = 0] = String(pay.shift_start).split(":").map(Number);
 
   const days = new Map<string, number>();
   let lateMin = 0;

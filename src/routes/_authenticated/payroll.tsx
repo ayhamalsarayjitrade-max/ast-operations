@@ -159,7 +159,7 @@ function PayRow({ id, name, pay, onDone }: { id: string; name: string; pay: any;
     const row: any = { user_id: id, shift_start: v.shift_start, updated_at: new Date().toISOString() };
     FIELDS.forEach(([k]) => (row[k] = Number(v[k]) || 0));
     const { error } = await supabase.from("employee_pay").upsert(row);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(`تم حفظ بيانات ${name}`);
     onDone();
   }
@@ -182,7 +182,7 @@ function AdjustForm({ staff, month, onDone }: { staff: { id: string; full_name: 
   async function add(e: React.FormEvent) {
     e.preventDefault();
     const { error } = await supabase.from("pay_adjustments").insert({ ...f, amount: Number(f.amount), month });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setF({ ...f, amount: "", note: "" });
     onDone();
   }

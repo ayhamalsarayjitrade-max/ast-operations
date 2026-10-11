@@ -46,10 +46,10 @@ function AttendancePage() {
     const pos = await getPosition();
     if (!pos) toast.warning("تعذر تحديد الموقع — سيتم التسجيل بدون موقع");
     const { error } = open
-      ? await supabase.from("attendance").update({ check_out: new Date().toISOString(), out_lat: pos?.lat, out_lng: pos?.lng }).eq("id", open.id)
-      : await supabase.from("attendance").insert({ in_lat: pos?.lat, in_lng: pos?.lng });
+      ? await supabase.from("attendance").update({ check_out: new Date().toISOString(), out_lat: pos?.lat ?? null, out_lng: pos?.lng ?? null }).eq("id", open.id)
+      : await supabase.from("attendance").insert({ in_lat: pos?.lat ?? null, in_lng: pos?.lng ?? null });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     notify(open ? "تم تسجيل الانصراف" : "تم تسجيل الحضور", new Date().toLocaleTimeString("ar"), "success");
     qc.invalidateQueries({ queryKey: ["attendance"] });
   }
@@ -57,7 +57,7 @@ function AttendancePage() {
   async function requestLeave(e: React.FormEvent) {
     e.preventDefault();
     const { error } = await supabase.from("leaves").insert({ ...lv, paid: lv.kind !== "unpaid" });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("تم إرسال طلب الإجازة");
     setLv({ kind: "annual", start_date: "", end_date: "", reason: "" });
     qc.invalidateQueries({ queryKey: ["attendance"] });
