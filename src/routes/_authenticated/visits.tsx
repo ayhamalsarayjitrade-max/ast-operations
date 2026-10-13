@@ -42,7 +42,7 @@ function VisitsPage() {
       if (paths.length) {
         const { data: signed } = await supabase.storage.from("shop-photos").createSignedUrls(paths, 3600);
         const m = new Map((signed ?? []).map((x) => [x.path, x.signedUrl]));
-        rows.forEach((r) => (r.url = r.photo_path ? m.get(r.photo_path) : null));
+        rows.forEach((r) => (r.url = r.photo_path ? (m.get(r.photo_path) ?? null) : null));
       }
       return rows;
     },
