@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe, hasRole } from "@/lib/auth";
+import { useStaff } from "@/lib/staff";
 import { ORDER_SELECT, STATUS_LABEL, fmtDate, money, type OrderStatus } from "@/lib/orders";
 import { StatusBadge, type OrderRow } from "@/components/OrderCard";
 import { Button } from "@/components/ui/button";
@@ -26,7 +27,7 @@ function Dashboard() {
   });
   const { data: visits = [] } = useQuery({
     queryKey: ["visits", "today"],
-    queryFn: async () => (await supabase.from("visits").select("id, has_order").gte("created_at", start.toISOString())).data ?? [],
+    queryFn: async () => (await supabase.from("visits").select("id, has_order, rep_id").gte("created_at", start.toISOString())).data ?? [],
   });
 
   const count = (s: OrderStatus) => orders.filter((o) => o.status === s).length;
@@ -40,12 +41,33 @@ function Dashboard() {
     { l: "مبيعات اليوم", v: money(sales) },
   ];
 
+  const { data: staff = [] } = useStaff();
+  const nameOf = (id: string | null) => staff.find((s) => s.id === id)?.full_name ?? "—";
+  const late = orders.filter((o) => o.delivery_at && !["delivered", "cancelled"].includes(o.status) && new Date(o.delivery_at).getTime() < Date.now());
+  const repIds = Array.from(new Set(visits.map((v: any) => v.rep_id)));
+  const driverIds = Array.from(new Set(orders.map((o: any) => o.driver_id).filter(Boolean)));
   const report = [
-    `📊 تقرير يوم ${new Date().toLocaleDateString("ar")}`,
-    ...stats.map((s) => `• ${s.l}: ${s.v}`),
+    `📊 *تقرير ميدان — ${new Date().toLocaleDateString("ar", { dateStyle: "full" })}*`,
     "",
-    ...orders.slice(0, 20).map((o) => `#${o.number} ${o.customers?.name} — ${STATUS_LABEL[o.status]} — ${money(o.total)}`),
-  ].join("\n");
+    ...stats.map((s) => `• ${s.l}: *${s.v}*`),
+    `• نسبة التحويل: *${visits.length ? Math.round((visits.filter((v) => v.has_order).length / visits.length) * 100) : 0}%*`,
+    "",
+    repIds.length ? "👤 *المناديب*" : "",
+    ...repIds.map((id) => {
+      const vs = visits.filter((v: any) => v.rep_id === id);
+      return `- ${nameOf(id)}: ${vs.length} زيارة / ${vs.filter((v) => v.has_order).length} طلب`;
+    }),
+    driverIds.length ? "\n🚚 *السائقون*" : "",
+    ...driverIds.map((id) => {
+      const os = orders.filter((o: any) => o.driver_id === id);
+      return `- ${nameOf(id)}: ${os.filter((o) => o.status === "delivered").length}/${os.length} مُسلّم`;
+    }),
+    late.length ? `\n⚠️ *طلبات متأخرة (${late.length})*` : "",
+    ...late.map((o) => `#${o.number} ${o.customers?.name} — موعد ${fmtDate(o.delivery_at)}`),
+    "",
+    "🧾 *الطلبات*",
+    ...orders.slice(0, 25).map((o) => `#${o.number} ${o.customers?.name} — ${STATUS_LABEL[o.status]} — ${money(o.total)}`),
+  ].filter((l, i, a) => l !== "" || a[i - 1] !== "").join("\n");
 
   return (
     <div className="space-y-6">
@@ -65,6 +87,8 @@ function Dashboard() {
         {hasRole(me, "rep") && <Button asChild><Link to="/rep">زيارة جديدة</Link></Button>}
         {hasRole(me, "warehouse") && <Button asChild variant="secondary"><Link to="/warehouse">تجهيز الطلبات</Link></Button>}
         {hasRole(me, "driver") && <Button asChild variant="secondary"><Link to="/driver">طلباتي للتوصيل</Link></Button>}
+        {hasRole(me, "warehouse") && <Button asChild variant="outline"><Link to="/visits">صور الزيارات</Link></Button>}
+        {hasRole(me, "warehouse") && late.length > 0 && <Button asChild variant="destructive"><Link to="/dispatch">طلبات متأخرة: {late.length}</Link></Button>}
       </div>
       {me?.roles.includes("admin") && (
         <div className="flex flex-wrap items-center gap-2 rounded-xl border bg-card p-4">

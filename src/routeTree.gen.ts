@@ -19,6 +19,7 @@ import { Route as AuthenticatedDriverRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedPayrollRouteImport } from './routes/_authenticated/payroll'
 import { Route as AuthenticatedRepRouteImport } from './routes/_authenticated/rep'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
+import { Route as AuthenticatedVisitsRouteImport } from './routes/_authenticated/visits'
 import { Route as AuthenticatedWarehouseRouteImport } from './routes/_authenticated/warehouse'
 
 const IndexRoute = IndexRouteImport.update({
@@ -70,6 +71,11 @@ const AuthenticatedTeamRoute = AuthenticatedTeamRouteImport.update({
   path: '/team',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedVisitsRoute = AuthenticatedVisitsRouteImport.update({
+  id: '/visits',
+  path: '/visits',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedWarehouseRoute = AuthenticatedWarehouseRouteImport.update({
   id: '/warehouse',
   path: '/warehouse',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/payroll': typeof AuthenticatedPayrollRoute
   '/rep': typeof AuthenticatedRepRoute
   '/team': typeof AuthenticatedTeamRoute
+  '/visits': typeof AuthenticatedVisitsRoute
   '/warehouse': typeof AuthenticatedWarehouseRoute
 }
 export interface FileRoutesByTo {
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/payroll': typeof AuthenticatedPayrollRoute
   '/rep': typeof AuthenticatedRepRoute
   '/team': typeof AuthenticatedTeamRoute
+  '/visits': typeof AuthenticatedVisitsRoute
   '/warehouse': typeof AuthenticatedWarehouseRoute
 }
 export interface FileRoutesById {
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/_authenticated/payroll': typeof AuthenticatedPayrollRoute
   '/_authenticated/rep': typeof AuthenticatedRepRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
+  '/_authenticated/visits': typeof AuthenticatedVisitsRoute
   '/_authenticated/warehouse': typeof AuthenticatedWarehouseRoute
 }
 export interface FileRouteTypes {
@@ -126,6 +135,7 @@ export interface FileRouteTypes {
     | '/payroll'
     | '/rep'
     | '/team'
+    | '/visits'
     | '/warehouse'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/payroll'
     | '/rep'
     | '/team'
+    | '/visits'
     | '/warehouse'
   id:
     | '__root__'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/_authenticated/payroll'
     | '/_authenticated/rep'
     | '/_authenticated/team'
+    | '/_authenticated/visits'
     | '/_authenticated/warehouse'
   fileRoutesById: FileRoutesById
 }
@@ -232,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeamRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/visits': {
+      id: '/_authenticated/visits'
+      path: '/visits'
+      fullPath: '/visits'
+      preLoaderRoute: typeof AuthenticatedVisitsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/warehouse': {
       id: '/_authenticated/warehouse'
       path: '/warehouse'
@@ -250,6 +269,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPayrollRoute: typeof AuthenticatedPayrollRoute
   AuthenticatedRepRoute: typeof AuthenticatedRepRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
+  AuthenticatedVisitsRoute: typeof AuthenticatedVisitsRoute
   AuthenticatedWarehouseRoute: typeof AuthenticatedWarehouseRoute
 }
 
@@ -261,6 +281,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPayrollRoute: AuthenticatedPayrollRoute,
   AuthenticatedRepRoute: AuthenticatedRepRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,
+  AuthenticatedVisitsRoute: AuthenticatedVisitsRoute,
   AuthenticatedWarehouseRoute: AuthenticatedWarehouseRoute,
 }
 
