@@ -76,7 +76,14 @@ function DispatchPage() {
             <OrderCard
               key={o.id}
               o={o}
-              extra={<div className="mt-2 text-sm">السائق: <b>{nameOf(o.driver_id)}</b></div>}
+              extra={
+                <div className="mt-2 flex items-center gap-2 text-sm">
+                  السائق: <b>{nameOf(o.driver_id)}</b>
+                  {o.delivery_at && new Date(o.delivery_at).getTime() < Date.now() && (
+                    <span className="rounded-full bg-destructive/15 px-2 py-0.5 text-xs text-destructive">متأخر</span>
+                  )}
+                </div>
+              }
               actions={
                 o.status !== "out_for_delivery" ? (
                   <select className="h-9 rounded-md border bg-background px-2 text-sm" value={o.driver_id ?? ""} onChange={(e) => assign(o.id, e.target.value)}>
