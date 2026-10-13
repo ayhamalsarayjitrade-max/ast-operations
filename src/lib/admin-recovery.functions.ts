@@ -11,7 +11,7 @@ const schema = z.object({
 export const resetAdminAccount = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => schema.parse(d))
   .handler(async ({ data }) => {
-    const expected = process.env.ADMIN_RECOVERY_CODE;
+    const expected = process.env['ADMIN_RECOVERY_CODE'];
     if (!expected) throw new Error("رمز الاستعادة غير مُعدّ بعد");
     if (data.code !== expected) {
       await new Promise((r) => setTimeout(r, 1200));
