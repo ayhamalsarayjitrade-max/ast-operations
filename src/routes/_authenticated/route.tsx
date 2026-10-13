@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { LayoutDashboard, MapPinned, Warehouse, Truck, Navigation, Users, LogOut, Bell, Clock, Wallet } from "lucide-react";
+import { LayoutDashboard, MapPinned, Warehouse, Truck, Navigation, Users, LogOut, Bell, Clock, Wallet, Camera } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe, hasRole } from "@/lib/auth";
 import { notify, askNotificationPermission, unlockAudio } from "@/lib/notify";
@@ -24,6 +24,7 @@ const NAV: { to: string; label: string; icon: any; roles: AppRole[] }[] = [
   { to: "/warehouse", label: "المستودع", icon: Warehouse, roles: ["warehouse"] },
   { to: "/dispatch", label: "الإسناد والتتبع", icon: Navigation, roles: ["warehouse"] },
   { to: "/driver", label: "السائق", icon: Truck, roles: ["driver"] },
+  { to: "/visits", label: "الزيارات", icon: Camera, roles: ["warehouse"] },
   { to: "/attendance", label: "الحضور", icon: Clock, roles: ["rep", "warehouse", "driver"] },
   { to: "/payroll", label: "الرواتب", icon: Wallet, roles: [] },
   { to: "/team", label: "الفريق", icon: Users, roles: [] },
@@ -87,6 +88,38 @@ function Layout() {
       window.removeEventListener("pointerdown", unlock);
     };
   }, [qc]);
+
+  // Delivery-time reminders: check every minute, alert once per order per stage
+  useEffect(() => {
+    const seen = new Set<string>();
+    async function check() {
+      const m = meRef.current;
+      if (!m) return;
+      const soon = new Date(Date.now() + 30 * 60_000).toISOString();
+      let q = supabase
+        .from("orders")
+        .select("id, number, delivery_at, driver_id, rep_id, status")
+        .in("status", ["new", "preparing", "ready", "assigned", "out_for_delivery"])
+        .not("delivery_at", "is", null)
+        .lte("delivery_at", soon);
+      if (!hasRole(m, "warehouse")) q = q.or(`driver_id.eq.${m.id},rep_id.eq.${m.id}`);
+      const { data } = await q;
+      for (const o of data ?? []) {
+        const late = new Date(o.delivery_at!).getTime() < Date.now();
+        const key = `${o.id}:${late ? "late" : "soon"}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        notify(
+          late ? `تأخر تسليم #${o.number}` : `موعد تسليم قريب #${o.number}`,
+          late ? "تجاوز موعد التسليم المحدد" : `خلال أقل من 30 دقيقة — ${STATUS_LABEL[o.status as OrderStatus]}`,
+          "alert",
+        );
+      }
+    }
+    const t0 = setTimeout(check, 4000);
+    const t = setInterval(check, 60_000);
+    return () => { clearTimeout(t0); clearInterval(t); };
+  }, []);
 
   async function enableNotifs() {
     const r = await askNotificationPermission();
