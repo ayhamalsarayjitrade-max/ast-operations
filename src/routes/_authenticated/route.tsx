@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { LayoutDashboard, MapPinned, Warehouse, Truck, Navigation, Users, LogOut, Bell, Clock, Wallet, Camera } from "lucide-react";
+import { LayoutDashboard, MapPinned, Warehouse, Truck, Navigation, Users, LogOut, Bell, Clock, Wallet, Camera, KeyRound } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe, hasRole } from "@/lib/auth";
 import { notify, askNotificationPermission, unlockAudio } from "@/lib/notify";
@@ -38,8 +38,16 @@ function Layout() {
   meRef.current = me;
 
   useEffect(() => {
-    const unlock = () => unlockAudio();
+    const unlock = () => {
+      unlockAudio();
+      try {
+        if ("Notification" in window && Notification.permission === "default" && window.top === window.self) {
+          void Notification.requestPermission();
+        }
+      } catch { /* ignore */ }
+    };
     window.addEventListener("pointerdown", unlock, { once: true });
+    window.addEventListener("keydown", unlock, { once: true });
     const ch = supabase
       .channel("live-all")
       .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, (p) => {
@@ -86,6 +94,7 @@ function Layout() {
     return () => {
       supabase.removeChannel(ch);
       window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
     };
   }, [qc]);
 
@@ -154,6 +163,21 @@ function Layout() {
             </span>
             <Button size="icon" variant="ghost" onClick={enableNotifs} aria-label="تفعيل الإشعارات">
               <Bell className="h-4 w-4" />
+            </Button>
+            <Button
+              size="icon"
+              variant="ghost"
+              aria-label="تغيير كلمة المرور"
+              onClick={async () => {
+                const p = window.prompt("كلمة المرور الجديدة (6 أحرف على الأقل)");
+                if (!p) return;
+                if (p.length < 6) { toast.error("كلمة المرور قصيرة"); return; }
+                const { error } = await supabase.auth.updateUser({ password: p });
+                if (error) toast.error(error.message);
+                else toast.success("تم تغيير كلمة المرور");
+              }}
+            >
+              <KeyRound className="h-4 w-4" />
             </Button>
             <Button
               size="icon"
