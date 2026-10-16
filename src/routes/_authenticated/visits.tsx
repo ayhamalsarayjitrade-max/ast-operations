@@ -40,7 +40,7 @@ function VisitsPage() {
       const rows = (data ?? []) as unknown as V[];
       const paths = rows.map((r) => r.photo_path).filter(Boolean) as string[];
       if (paths.length) {
-        const { data: signed } = await supabase.storage.from("shop-photos").createSignedUrls(paths, 3600);
+        const { data: signed } = await supabase.storage.from("shop-photos").createSignedUrls(paths, 120);
         const m = new Map((signed ?? []).map((x) => [x.path, x.signedUrl]));
         rows.forEach((r) => (r.url = r.photo_path ? (m.get(r.photo_path) ?? null) : null));
       }

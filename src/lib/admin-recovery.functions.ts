@@ -21,13 +21,15 @@ export const resetAdminAccount = createServerFn({ method: "POST" })
     const email = data.email.toLowerCase();
 
     const { data: admins } = await supabaseAdmin.from("user_roles").select("user_id").eq("role", "admin").limit(1);
-    let adminId = admins?.[0]?.user_id as string | undefined;
+    const adminId0 = admins?.[0]?.user_id as string | undefined;
+    let adminId = adminId0;
 
-    // Is the target email already a user?
+    // Never take over another (non-admin) user's account by email.
     const { data: list } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 1000 });
     const existing = list?.users.find((u) => u.email?.toLowerCase() === email);
-
-    if (existing && existing.id !== adminId) adminId = existing.id;
+    if (existing && existing.id !== adminId0) {
+      throw new Error("هذا البريد مستخدم لحساب موظف آخر. اختر بريداً مختلفاً للمدير.");
+    }
 
     if (adminId) {
       const { error } = await supabaseAdmin.auth.admin.updateUserById(adminId, {
