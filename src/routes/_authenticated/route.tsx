@@ -171,7 +171,7 @@ function Layout() {
               onClick={async () => {
                 const p = window.prompt("كلمة المرور الجديدة (6 أحرف على الأقل)");
                 if (!p) return;
-                if (p.length < 6) return toast.error("كلمة المرور قصيرة");
+                if (p.length < 6) { toast.error("كلمة المرور قصيرة"); return; }
                 const { error } = await supabase.auth.updateUser({ password: p });
                 if (error) toast.error(error.message);
                 else toast.success("تم تغيير كلمة المرور");
