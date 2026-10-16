@@ -94,6 +94,7 @@ function Layout() {
     return () => {
       supabase.removeChannel(ch);
       window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
     };
   }, [qc]);
 
