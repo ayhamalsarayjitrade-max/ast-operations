@@ -12,7 +12,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_authenticated/attendance")({
-  head: () => ({ meta: [{ title: "الحضور والانصراف — ميدان" }, { name: "description", content: "تسجيل الحضور والانصراف بالموقع وطلبات الإجازة." }] }),
+  head: () => ({ meta: [
+    { title: "الحضور والانصراف — ميدان" },
+    { name: "description", content: "تسجيل الحضور والانصراف بالموقع وطلبات الإجازة." },
+    { property: "og:title", content: "الحضور والانصراف — ميدان" },
+    { property: "og:description", content: "تسجيل الحضور والانصراف بالموقع وطلبات الإجازة." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: AttendancePage,
 });
 

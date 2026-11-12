@@ -11,6 +11,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { UpdateRecoveryOverlay, UpdateRecoveryScreen } from "@/components/UpdateRecovery";
+import { isAppFileLoadError } from "@/lib/update-recovery";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -37,6 +39,13 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
+  if (isAppFileLoadError(error)) {
+    return <UpdateRecoveryScreen onRetry={async () => {
+      reset();
+      await router.invalidate();
+      if (router.state.matches.some((match) => match.status === "error")) throw new Error("Files still unavailable");
+    }} />;
+  }
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
@@ -91,6 +100,7 @@ function RootShell({ children }: { children: ReactNode }) {
       </head>
       <body>
         {children}
+        <UpdateRecoveryOverlay />
         <Scripts />
       </body>
     </html>

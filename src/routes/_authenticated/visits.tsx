@@ -9,7 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/_authenticated/visits")({
-  head: () => ({ meta: [{ title: "الزيارات الميدانية — ميدان" }] }),
+  head: () => ({ meta: [
+    { title: "الزيارات الميدانية — ميدان" },
+    { name: "description", content: "تصفح الزيارات الميدانية وصور المحلات وبيانات العملاء في ميدان." },
+    { property: "og:title", content: "الزيارات الميدانية — ميدان" },
+    { property: "og:description", content: "تصفح الزيارات الميدانية وصور المحلات وبيانات العملاء في ميدان." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: VisitsPage,
 });
 

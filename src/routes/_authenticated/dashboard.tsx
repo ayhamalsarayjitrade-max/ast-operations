@@ -11,7 +11,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "لوحة التحكم — ميدان" }] }),
+  head: () => ({ meta: [
+    { title: "لوحة التحكم — ميدان" },
+    { name: "description", content: "ملخص زيارات اليوم والطلبات والمبيعات والتوصيل في ميدان." },
+    { property: "og:title", content: "لوحة التحكم — ميدان" },
+    { property: "og:description", content: "ملخص زيارات اليوم والطلبات والمبيعات والتوصيل في ميدان." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: Dashboard,
 });
 

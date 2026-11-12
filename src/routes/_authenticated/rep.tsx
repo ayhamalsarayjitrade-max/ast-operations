@@ -14,7 +14,14 @@ import { fmtDate, money, ORDER_SELECT } from "@/lib/orders";
 import { OrderCard, type OrderRow } from "@/components/OrderCard";
 
 export const Route = createFileRoute("/_authenticated/rep")({
-  head: () => ({ meta: [{ title: "تطبيق المندوب — ميدان" }] }),
+  head: () => ({ meta: [
+    { title: "تطبيق المندوب — ميدان" },
+    { name: "description", content: "تسجيل زيارات العملاء وصور المحلات وإنشاء الطلبات في ميدان." },
+    { property: "og:title", content: "تطبيق المندوب — ميدان" },
+    { property: "og:description", content: "تسجيل زيارات العملاء وصور المحلات وإنشاء الطلبات في ميدان." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: RepPage,
 });
 

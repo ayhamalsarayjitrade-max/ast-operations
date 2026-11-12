@@ -13,3 +13,4 @@
 - Roles live in public.user_roles; first signup becomes admin, admins assign roles via set_user_role RPC; why: avoid privilege escalation through metadata.
 - Live updates come from one realtime channel in src/routes/_authenticated/route.tsx that invalidates queries and fires notify(); why: single subscription, consistent sound/visual alerts.
 - Order status history and stock deduction are handled by DB triggers on orders; why: consistent regardless of which client updates.
+- App-file failures use a shell-level recovery overlay and in-place router retry, never automatic reload; why: keep mounted forms alive and require explicit consent before discarding unsaved work.

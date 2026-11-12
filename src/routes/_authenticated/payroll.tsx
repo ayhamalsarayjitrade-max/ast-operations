@@ -12,7 +12,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_authenticated/payroll")({
-  head: () => ({ meta: [{ title: "الموارد البشرية والرواتب — ميدان" }, { name: "description", content: "الحضور والإجازات والبدلات والخصومات ومسير الرواتب." }] }),
+  head: () => ({ meta: [
+    { title: "الموارد البشرية والرواتب — ميدان" },
+    { name: "description", content: "الحضور والإجازات والبدلات والخصومات ومسير الرواتب." },
+    { property: "og:title", content: "الموارد البشرية والرواتب — ميدان" },
+    { property: "og:description", content: "الحضور والإجازات والبدلات والخصومات ومسير الرواتب." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: PayrollPage,
 });
 

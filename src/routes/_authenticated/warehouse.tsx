@@ -11,7 +11,14 @@ import { setStatus } from "@/lib/order-actions";
 import { OrderCard, type OrderRow } from "@/components/OrderCard";
 
 export const Route = createFileRoute("/_authenticated/warehouse")({
-  head: () => ({ meta: [{ title: "لوحة المستودع — ميدان" }] }),
+  head: () => ({ meta: [
+    { title: "لوحة المستودع — ميدان" },
+    { name: "description", content: "إدارة المنتجات والمخزون وتجهيز الطلبات في ميدان." },
+    { property: "og:title", content: "لوحة المستودع — ميدان" },
+    { property: "og:description", content: "إدارة المنتجات والمخزون وتجهيز الطلبات في ميدان." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: WarehousePage,
 });
 

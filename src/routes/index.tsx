@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "ميدان — المناديب والمستودعات والتوصيل" },
       { name: "description", content: "سجّل زيارات العملاء، جهّز الطلبات من المستودع، وتابع السائقين لحظياً." },
       { property: "og:title", content: "ميدان — المناديب والمستودعات والتوصيل" },

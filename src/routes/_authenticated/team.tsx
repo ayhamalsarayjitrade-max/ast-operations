@@ -8,7 +8,14 @@ import { ROLE_LABEL, type AppRole } from "@/lib/orders";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export const Route = createFileRoute("/_authenticated/team")({
-  head: () => ({ meta: [{ title: "الفريق والصلاحيات — ميدان" }] }),
+  head: () => ({ meta: [
+    { title: "الفريق والصلاحيات — ميدان" },
+    { name: "description", content: "إدارة فريق ميدان وتعيين صلاحيات الموظفين." },
+    { property: "og:title", content: "الفريق والصلاحيات — ميدان" },
+    { property: "og:description", content: "إدارة فريق ميدان وتعيين صلاحيات الموظفين." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: TeamPage,
 });
 

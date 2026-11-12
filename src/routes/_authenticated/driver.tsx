@@ -13,7 +13,14 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 
 export const Route = createFileRoute("/_authenticated/driver")({
-  head: () => ({ meta: [{ title: "تطبيق السائق — ميدان" }] }),
+  head: () => ({ meta: [
+    { title: "تطبيق السائق — ميدان" },
+    { name: "description", content: "طلبات السائق وتحديث حالات التسليم ومشاركة الموقع في ميدان." },
+    { property: "og:title", content: "تطبيق السائق — ميدان" },
+    { property: "og:description", content: "طلبات السائق وتحديث حالات التسليم ومشاركة الموقع في ميدان." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: DriverPage,
 });
 
