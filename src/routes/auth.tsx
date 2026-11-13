@@ -23,19 +23,27 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const nav = useNavigate();
-  const [mode, setMode] = useState<"in" | "up" | "admin">("in");
+  const [mode, setMode] = useState<"in" | "up" | "admin" | "forgot">("in");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
+  const [sent, setSent] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     try {
-      if (mode === "in") {
+      if (mode === "forgot") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        setSent(true);
+        toast.success("تم طلب رابط الاستعادة");
+      } else if (mode === "in") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         nav({ to: "/dashboard" });
@@ -43,7 +51,7 @@ function AuthPage() {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: window.location.origin + "/dashboard", data: { full_name: name, phone } },
+          options: { emailRedirectTo: window.location.origin, data: { full_name: name, phone } },
         });
         if (error) throw error;
         if (data.session) nav({ to: "/dashboard" });
@@ -63,7 +71,7 @@ function AuthPage() {
     }
   }
 
-  const title = mode === "in" ? "تسجيل الدخول" : mode === "up" ? "حساب موظف جديد" : "تعيين حساب المدير";
+  const title = mode === "in" ? "تسجيل الدخول" : mode === "up" ? "حساب موظف جديد" : mode === "forgot" ? "استعادة كلمة المرور" : "تعيين حساب المدير";
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -71,6 +79,7 @@ function AuthPage() {
         <div>
           <div className="text-sm font-semibold text-primary">ميدان</div>
           <h1 className="text-2xl font-bold">{title}</h1>
+          {mode === "forgot" && <p className="mt-2 text-sm text-muted-foreground">{sent ? "إذا كان البريد مرتبطاً بحساب، سيصلك رابط آمن لتعيين كلمة مرور جديدة. تحقق أيضاً من البريد غير المرغوب." : "أدخل بريد حساب المدير أو الموظف لاستلام رابط تعيين كلمة مرور جديدة، دون رمز استعادة."}</p>}
           {mode === "admin" && (
             <p className="mt-1 text-xs text-muted-foreground">أدخل رمز الاستعادة، ثم البريد وكلمة المرور الجديدين للمدير. الدخول يتم فوراً.</p>
           )}
@@ -97,21 +106,22 @@ function AuthPage() {
           <Label>{mode === "admin" ? "بريد المدير" : "البريد الإلكتروني"}</Label>
           <Input dir="ltr" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
-        <div className="space-y-1.5">
+        {mode !== "forgot" && <div className="space-y-1.5">
           <Label>{mode === "admin" ? "كلمة المرور الجديدة" : "كلمة المرور"}</Label>
           <Input dir="ltr" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
-        </div>
+        </div>}
         <Button className="w-full" disabled={busy}>
-          {mode === "in" ? "دخول" : mode === "up" ? "إنشاء الحساب" : "حفظ والدخول كمدير"}
+          {busy ? "جارٍ التنفيذ..." : mode === "in" ? "دخول" : mode === "up" ? "إنشاء الحساب" : mode === "forgot" ? "إرسال رابط الاستعادة" : "حفظ والدخول كمدير"}
         </Button>
         <div className="flex flex-col gap-1">
-          <button type="button" className="text-sm text-muted-foreground hover:text-foreground" onClick={() => setMode(mode === "in" ? "up" : "in")}>
+          {mode === "in" && <Button type="button" variant="link" onClick={() => { setMode("forgot"); setSent(false); }}>نسيت كلمة المرور؟ استعادة حساب المدير</Button>}
+          <Button type="button" variant="ghost" className="text-sm text-muted-foreground hover:text-foreground" onClick={() => setMode(mode === "in" ? "up" : "in")}>
             {mode === "in" ? "ليس لديك حساب؟ أنشئ حساباً" : "لديك حساب؟ سجّل الدخول"}
-          </button>
+          </Button>
           {mode !== "admin" && (
-            <button type="button" className="text-xs text-primary hover:underline" onClick={() => setMode("admin")}>
-              تعيين / استعادة حساب المدير
-            </button>
+            <Button type="button" variant="link" className="text-xs" onClick={() => setMode("admin")}>
+              لدي رمز استعادة المدير
+            </Button>
           )}
         </div>
       </form>

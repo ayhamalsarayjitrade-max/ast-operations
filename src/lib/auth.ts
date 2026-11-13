@@ -1,12 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { AppRole } from "./orders";
+import { cachedRead } from "./field-store";
 
 export function useMe() {
   return useQuery({
     queryKey: ["me"],
+    networkMode: "always",
     queryFn: async () => {
-      const { data: u } = await supabase.auth.getUser();
+      const { data: session } = await supabase.auth.getSession();
+      if (!session.session) return null;
+      const userId = session.session.user.id;
+      return cachedRead(`me:${userId}`, async () => {
+      const { data: u, error: userError } = await supabase.auth.getUser();
+      if (userError) throw userError;
       if (!u.user) return null;
       const [{ data: profile }, { data: roles }] = await Promise.all([
         supabase.from("profiles").select("*").eq("id", u.user.id).maybeSingle(),
@@ -18,6 +25,7 @@ export function useMe() {
         name: profile?.full_name || u.user.email || "",
         roles: (roles ?? []).map((r) => r.role as AppRole),
       };
+      });
     },
   });
 }

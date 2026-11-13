@@ -8,12 +8,14 @@ import { notify, askNotificationPermission, unlockAudio } from "@/lib/notify";
 import { STATUS_LABEL, ROLE_LABEL, type AppRole, type OrderStatus } from "@/lib/orders";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { FieldSyncStatus } from "@/components/FieldSyncStatus";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) throw redirect({ to: "/auth" });
+    // Offline access restores only a previously authenticated session; RLS still validates all synced writes.
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) throw redirect({ to: "/auth" });
   },
   component: Layout,
 });
@@ -114,7 +116,8 @@ function Layout() {
       if (!hasRole(m, "warehouse")) q = q.or(`driver_id.eq.${m.id},rep_id.eq.${m.id}`);
       const { data } = await q;
       for (const o of data ?? []) {
-        const late = new Date(o.delivery_at!).getTime() < Date.now();
+        if (!o.delivery_at) continue;
+        const late = new Date(o.delivery_at).getTime() < Date.now();
         const key = `${o.id}:${late ? "late" : "soon"}`;
         if (seen.has(key)) continue;
         seen.add(key);
@@ -149,6 +152,7 @@ function Layout() {
               <Link
                 key={n.to}
                 to={n.to as any}
+                preload="intent"
                 className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted"
                 activeProps={{ className: "bg-secondary text-secondary-foreground font-semibold" }}
               >
@@ -169,12 +173,7 @@ function Layout() {
               variant="ghost"
               aria-label="تغيير كلمة المرور"
               onClick={async () => {
-                const p = window.prompt("كلمة المرور الجديدة (6 أحرف على الأقل)");
-                if (!p) return;
-                if (p.length < 6) { toast.error("كلمة المرور قصيرة"); return; }
-                const { error } = await supabase.auth.updateUser({ password: p });
-                if (error) toast.error(error.message);
-                else toast.success("تم تغيير كلمة المرور");
+                nav({ to: "/reset-password" });
               }}
             >
               <KeyRound className="h-4 w-4" />
@@ -194,6 +193,7 @@ function Layout() {
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-6 pb-24 md:pb-6">
+        {me && <FieldSyncStatus owner={me.id} />}
         {me && me.roles.length === 0 ? (
           <div className="rounded-xl border bg-card p-8 text-center">
             <h2 className="text-xl font-bold">بانتظار تحديد الصلاحية</h2>
@@ -208,6 +208,7 @@ function Layout() {
           <Link
             key={n.to}
             to={n.to as any}
+            preload="intent"
             className="flex flex-col items-center gap-0.5 px-2 text-[11px] text-muted-foreground"
             activeProps={{ className: "text-primary font-semibold" }}
           >

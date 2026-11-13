@@ -14,3 +14,7 @@
 - Live updates come from one realtime channel in src/routes/_authenticated/route.tsx that invalidates queries and fires notify(); why: single subscription, consistent sound/visual alerts.
 - Order status history and stock deduction are handled by DB triggers on orders; why: consistent regardless of which client updates.
 - App-file failures use a shell-level recovery overlay and in-place router retry, never automatic reload; why: keep mounted forms alive and require explicit consent before discarding unsaved work.
+- Field drafts and photos use account-scoped IndexedDB, and foreground reconnect/timer sync calls an atomic RLS RPC with stable IDs; why: tolerate lost responses without partial or duplicate orders, and never retain credentials in workers.
+- Offline app shell uses generateSW only in published non-preview contexts; why: keep editor updates safe while allowing previously visited pages offline.
+- Offline navigation may restore an existing session locally, but every queued write revalidates identity and runs under database RLS; why: cached role display cannot authorize writes.
+- Password recovery uses Cloud Auth email links on a public reset page, with recovery-code fallback retained; why: no anonymous account takeover or recovery secrets exposed.

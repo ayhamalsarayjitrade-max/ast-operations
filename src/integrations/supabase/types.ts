@@ -527,6 +527,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      sync_field_record: { Args: { payload: Json }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "rep" | "warehouse" | "driver"
