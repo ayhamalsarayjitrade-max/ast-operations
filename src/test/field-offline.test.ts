@@ -1,4 +1,5 @@
 import "fake-indexeddb/auto";
+import { Blob as NodeBlob } from "node:buffer";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { enqueue, fieldDB, queued, saveDraft, type FieldRecord } from "@/lib/field-store";
 import { isOfflinePreview } from "@/lib/offline-shell";
@@ -6,7 +7,7 @@ const identity = vi.hoisted(() => ({ id: "rep-a" }));
 vi.mock("@/integrations/supabase/client", () => ({ supabase: { auth: { getUser: async () => ({ data: { user: { id: identity.id } } }) } } }));
 import { syncFieldQueue } from "@/lib/field-sync";
 function record(id = "visit-a"): FieldRecord {
-  return { id, owner: "rep-a", orderId: "order-a", resolvedCustomerId: "customer-a", customerId: "new", newName: "Shop", newPhone: "123", phone: "123", address: "Street", loc: { lat: 23, lng: 58 }, photo: new Blob(["photo"], { type: "image/jpeg" }), note: "Visit", hasOrder: true, items: [{ product_id: "product-a", qty: 2 }], deliveryAt: "", capturedAt: "2026-11-13T04:00:00Z" };
+  return { id, owner: "rep-a", orderId: "order-a", resolvedCustomerId: "customer-a", customerId: "new", newName: "Shop", newPhone: "123", phone: "123", address: "Street", loc: { lat: 23, lng: 58 }, photo: new NodeBlob(["photo"], { type: "image/jpeg" }) as unknown as Blob, note: "Visit", hasOrder: true, items: [{ product_id: "product-a", qty: 2 }], deliveryAt: "", capturedAt: "2026-11-13T04:00:00Z" };
 }
 beforeEach(async () => {
   const db = await fieldDB(); await db.clear("outbox"); await db.clear("drafts");
