@@ -42,13 +42,13 @@ function CustomerPortal() {
     if (error) throw error; return (data ?? []) as unknown as OrderRow[];
   } });
   const selected = products.filter((p) => (cart[p.id] ?? 0) > 0);
-  const total = selected.reduce((sum, p) => sum + Number(p.price) * cart[p.id], 0);
+  const total = selected.reduce((sum, p) => sum + Number(p.price) * (cart[p.id] ?? 0), 0);
 
   function change(id: string, delta: number, max: number) {
     setCart((current) => ({ ...current, [id]: Math.max(0, Math.min(max, (current[id] ?? 0) + delta)) }));
   }
   async function submit() {
-    if (!selected.length) return toast.error("أضف منتجاً واحداً على الأقل");
+    if (!selected.length) { toast.error("أضف منتجاً واحداً على الأقل"); return; }
     setBusy(true);
     try {
       const { error } = await supabase.rpc("submit_customer_order", { payload: {
@@ -82,7 +82,7 @@ function CustomerPortal() {
     </section>
     {selected.length > 0 && <section className="space-y-4 rounded-xl border bg-card p-5">
       <h2 className="flex items-center gap-2 font-bold"><ShoppingCart className="h-5 w-5" />ملخص الطلب</h2>
-      {selected.map((p) => <div key={p.id} className="flex items-center gap-3 text-sm"><span className="flex-1">{p.name}</span><Input aria-label={`كمية ${p.name}`} type="number" min={1} max={p.stock} className="w-20" value={cart[p.id]} onChange={(e) => setCart({ ...cart, [p.id]: Math.max(1, Math.min(p.stock, Number(e.target.value) || 1)) })} /><b>{money(Number(p.price) * cart[p.id])}</b></div>)}
+      {selected.map((p) => <div key={p.id} className="flex items-center gap-3 text-sm"><span className="flex-1">{p.name}</span><Input aria-label={`كمية ${p.name}`} type="number" min={1} max={p.stock} className="w-20" value={cart[p.id] ?? 0} onChange={(e) => setCart({ ...cart, [p.id]: Math.max(1, Math.min(p.stock, Number(e.target.value) || 1)) })} /><b>{money(Number(p.price) * (cart[p.id] ?? 0))}</b></div>)}
       <div className="space-y-2"><Label htmlFor="portal-delivery">موعد التسليم المفضل</Label><Input id="portal-delivery" type="datetime-local" value={deliveryAt} onChange={(e) => setDeliveryAt(e.target.value)} /></div>
       <div className="space-y-2"><Label htmlFor="portal-notes">ملاحظات</Label><Textarea id="portal-notes" value={notes} onChange={(e) => setNotes(e.target.value)} /></div>
       <div className="flex items-center justify-between text-lg font-bold"><span>الإجمالي</span><span>{money(total)}</span></div>

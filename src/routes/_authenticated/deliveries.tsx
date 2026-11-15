@@ -27,7 +27,7 @@ function DeliveriesPage() {
     setMedia({ photo: "", signature: "" });
     const proof = selected?.delivery_proofs;
     if (!proof) return;
-    void Promise.all([proof.photo_path, proof.signature_path].map(async (path) => path ? (await supabase.storage.from("delivery-proofs").createSignedUrl(path, 120)).data?.signedUrl ?? "" : "")).then(([photo, signature]) => setMedia({ photo, signature }));
+    void Promise.all([proof.photo_path, proof.signature_path].map(async (path) => path ? (await supabase.storage.from("delivery-proofs").createSignedUrl(path, 120)).data?.signedUrl ?? "" : "")).then(([photo = "", signature = ""]) => setMedia({ photo, signature }));
   }, [selected]);
   const proof = selected?.delivery_proofs;
   return <div className="space-y-4"><div><h1 className="text-2xl font-bold">إثباتات التسليم</h1><p className="text-sm text-muted-foreground">راجع المستلم والصورة أو التوقيع والوقت والموقع.</p></div>

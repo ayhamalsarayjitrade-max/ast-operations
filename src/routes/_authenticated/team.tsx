@@ -24,7 +24,7 @@ function TeamPage() {
   if (!me?.roles.includes("admin")) return <p>هذه الصفحة للمدير فقط.</p>;
   async function toggle(uid: string, role: AppRole, on: boolean) {
     const { error } = await supabase.rpc("set_user_role", { _user_id: uid, _role: role, _enabled: on });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     await Promise.all([qc.invalidateQueries({ queryKey: ["staff"] }), qc.invalidateQueries({ queryKey: ["me"] })]);
   }
   async function linkCustomer(uid: string, customerId: string) {

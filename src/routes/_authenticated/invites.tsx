@@ -35,7 +35,7 @@ function InvitesPage() {
   function url(invite: Invite) { return `${window.location.origin}/invite/${invite.code}`; }
   async function copy(invite: Invite) { await navigator.clipboard.writeText(url(invite)); toast.success("تم نسخ رابط الدعوة"); }
   async function create() {
-    if (!label.trim()) return toast.error("اكتب اسماً للدعوة");
+    if (!label.trim()) { toast.error("اكتب اسماً للدعوة"); return; }
     setBusy(true);
     try {
       const code = crypto.randomUUID().replaceAll("-", "");

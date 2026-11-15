@@ -11,8 +11,8 @@ import type { AppRole } from "@/lib/orders";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (input: Record<string, unknown>): { mode?: string; invite?: string } => ({
-    ...(typeof input.mode === "string" ? { mode: input.mode } : {}),
-    ...(typeof input.invite === "string" ? { invite: input.invite } : {}),
+    ...(typeof input["mode"] === "string" ? { mode: input["mode"] } : {}),
+    ...(typeof input["invite"] === "string" ? { invite: input["invite"] } : {}),
   }),
   head: () => ({
     meta: [

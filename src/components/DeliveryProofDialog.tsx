@@ -22,7 +22,7 @@ export function DeliveryProofDialog({ orderId, orderNumber, driverId, open, onOp
   const [busy, setBusy] = useState(false);
 
   function locate() {
-    if (!navigator.geolocation) return toast.error("الموقع غير مدعوم على هذا الجهاز");
+    if (!navigator.geolocation) { toast.error("الموقع غير مدعوم على هذا الجهاز"); return; }
     navigator.geolocation.getCurrentPosition(
       (p) => { setLocation({ lat: p.coords.latitude, lng: p.coords.longitude }); toast.success("تم تحديد موقع التسليم"); },
       () => toast.error("اسمح بالوصول للموقع ثم أعد المحاولة"),
@@ -59,7 +59,7 @@ export function DeliveryProofDialog({ orderId, orderNumber, driverId, open, onOp
 
   async function submit() {
     const error = deliveryProofError({ recipientName: recipient, photo, signature, location });
-    if (error) return toast.error(error);
+    if (error) { toast.error(error); return; }
     setBusy(true);
     try {
       const base = `${driverId}/${orderId}`;

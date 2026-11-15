@@ -14,9 +14,10 @@ export function StaffTour({ userId, enabled }: { userId: string; enabled: boolea
   const [step, setStep] = useState(0);
   useEffect(() => { if (enabled && !localStorage.getItem(key)) setOpen(true); }, [enabled, key]);
   function close() { localStorage.setItem(key, "done"); setOpen(false); }
-  const CurrentIcon = steps[step].icon;
+  const current = steps[step] ?? steps[0]!;
+  const CurrentIcon = current.icon;
   return <Dialog open={open} onOpenChange={(value) => { if (!value) close(); }}><DialogContent dir="rtl" className="max-w-sm"><DialogHeader className="text-right"><DialogTitle>جولة سريعة في ميدان</DialogTitle><DialogDescription>ثلاث خطوات لبدء العمل من هاتفك.</DialogDescription></DialogHeader>
-    <div className="rounded-xl bg-muted/60 p-6 text-center"><CurrentIcon className="mx-auto h-10 w-10 text-primary" /><h2 className="mt-4 text-lg font-bold">{steps[step].title}</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">{steps[step].text}</p></div>
+    <div className="rounded-xl bg-muted/60 p-6 text-center"><CurrentIcon className="mx-auto h-10 w-10 text-primary" /><h2 className="mt-4 text-lg font-bold">{current.title}</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">{current.text}</p></div>
     <div className="flex items-center justify-between"><span className="text-xs text-muted-foreground">{step + 1} / {steps.length}</span><div className="flex gap-2">{step < steps.length - 1 ? <Button onClick={() => setStep(step + 1)}>التالي</Button> : <Button onClick={close}>ابدأ العمل</Button>}<Button variant="ghost" onClick={close}>تخطي</Button></div></div>
   </DialogContent></Dialog>;
 }
