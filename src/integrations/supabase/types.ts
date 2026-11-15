@@ -50,6 +50,32 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_accounts: {
+        Row: {
+          created_at: string
+          customer_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_accounts_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: true
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       customers: {
         Row: {
           address: string | null
@@ -82,6 +108,50 @@ export type Database = {
           phone?: string
         }
         Relationships: []
+      }
+      delivery_proofs: {
+        Row: {
+          created_at: string
+          delivered_at: string
+          driver_id: string
+          lat: number
+          lng: number
+          order_id: string
+          photo_path: string | null
+          recipient_name: string
+          signature_path: string | null
+        }
+        Insert: {
+          created_at?: string
+          delivered_at?: string
+          driver_id: string
+          lat: number
+          lng: number
+          order_id: string
+          photo_path?: string | null
+          recipient_name: string
+          signature_path?: string | null
+        }
+        Update: {
+          created_at?: string
+          delivered_at?: string
+          driver_id?: string
+          lat?: number
+          lng?: number
+          order_id?: string
+          photo_path?: string | null
+          recipient_name?: string
+          signature_path?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_proofs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       driver_locations: {
         Row: {
@@ -142,6 +212,65 @@ export type Database = {
           work_days?: number
         }
         Relationships: []
+      }
+      invite_links: {
+        Row: {
+          active: boolean
+          clicks: number
+          code: string
+          created_at: string
+          created_by: string | null
+          goal: string | null
+          id: string
+          label: string
+        }
+        Insert: {
+          active?: boolean
+          clicks?: number
+          code: string
+          created_at?: string
+          created_by?: string | null
+          goal?: string | null
+          id?: string
+          label: string
+        }
+        Update: {
+          active?: boolean
+          clicks?: number
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          goal?: string | null
+          id?: string
+          label?: string
+        }
+        Relationships: []
+      }
+      invite_signups: {
+        Row: {
+          created_at: string
+          invite_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          invite_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          invite_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invite_signups_invite_id_fkey"
+            columns: ["invite_id"]
+            isOneToOne: false
+            referencedRelation: "invite_links"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       leaves: {
         Row: {
@@ -464,6 +593,8 @@ export type Database = {
       }
       visits: {
         Row: {
+          ai_follow_up: string | null
+          ai_summary: string | null
           created_at: string
           customer_id: string
           has_order: boolean
@@ -475,6 +606,8 @@ export type Database = {
           rep_id: string
         }
         Insert: {
+          ai_follow_up?: string | null
+          ai_summary?: string | null
           created_at?: string
           customer_id: string
           has_order?: boolean
@@ -486,6 +619,8 @@ export type Database = {
           rep_id?: string
         }
         Update: {
+          ai_follow_up?: string | null
+          ai_summary?: string | null
           created_at?: string
           customer_id?: string
           has_order?: boolean
@@ -511,6 +646,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_access_order: { Args: { _order_id: string }; Returns: boolean }
+      complete_invite_signup: { Args: { _code: string }; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -519,6 +656,11 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      record_invite_click: { Args: { _code: string }; Returns: undefined }
+      save_visit_ai_summary: {
+        Args: { _follow_up: string; _summary: string; _visit_id: string }
+        Returns: undefined
+      }
       set_user_role: {
         Args: {
           _enabled: boolean
@@ -527,10 +669,12 @@ export type Database = {
         }
         Returns: undefined
       }
+      submit_customer_order: { Args: { payload: Json }; Returns: string }
+      submit_delivery_proof: { Args: { payload: Json }; Returns: string }
       sync_field_record: { Args: { payload: Json }; Returns: string }
     }
     Enums: {
-      app_role: "admin" | "rep" | "warehouse" | "driver"
+      app_role: "admin" | "rep" | "warehouse" | "driver" | "customer"
       order_status:
         | "new"
         | "preparing"
@@ -666,7 +810,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "rep", "warehouse", "driver"],
+      app_role: ["admin", "rep", "warehouse", "driver", "customer"],
       order_status: [
         "new",
         "preparing",

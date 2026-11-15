@@ -1,7 +1,7 @@
-import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { LayoutDashboard, MapPinned, Warehouse, Truck, Navigation, Users, LogOut, Bell, Clock, Wallet, Camera, KeyRound } from "lucide-react";
+import { LayoutDashboard, MapPinned, Warehouse, Truck, Navigation, Users, LogOut, Bell, Clock, Wallet, Camera, KeyRound, ClipboardCheck, UserRoundPlus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe, hasRole } from "@/lib/auth";
 import { notify, askNotificationPermission, unlockAudio } from "@/lib/notify";
@@ -9,6 +9,8 @@ import { STATUS_LABEL, ROLE_LABEL, type AppRole, type OrderStatus } from "@/lib/
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { FieldSyncStatus } from "@/components/FieldSyncStatus";
+import { StaffTour } from "@/components/StaffTour";
+import { canAccessPath, homeForRoles } from "@/lib/access";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -26,7 +28,9 @@ const NAV: { to: string; label: string; icon: any; roles: AppRole[] }[] = [
   { to: "/warehouse", label: "المستودع", icon: Warehouse, roles: ["warehouse"] },
   { to: "/dispatch", label: "الإسناد والتتبع", icon: Navigation, roles: ["warehouse"] },
   { to: "/driver", label: "السائق", icon: Truck, roles: ["driver"] },
+  { to: "/deliveries", label: "إثباتات التسليم", icon: ClipboardCheck, roles: ["warehouse"] },
   { to: "/visits", label: "الزيارات", icon: Camera, roles: ["warehouse"] },
+  { to: "/invites", label: "الدعوات", icon: UserRoundPlus, roles: [] },
   { to: "/attendance", label: "الحضور", icon: Clock, roles: ["rep", "warehouse", "driver"] },
   { to: "/payroll", label: "الرواتب", icon: Wallet, roles: [] },
   { to: "/team", label: "الفريق", icon: Users, roles: [] },
@@ -36,6 +40,7 @@ function Layout() {
   const { data: me } = useMe();
   const qc = useQueryClient();
   const nav = useNavigate();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
   const meRef = useRef(me);
   meRef.current = me;
 
@@ -193,23 +198,30 @@ function Layout() {
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-6 pb-24 md:pb-6">
-        {me && <FieldSyncStatus owner={me.id} />}
+        {me && me.roles.includes("rep") && <StaffTour userId={me.id} enabled />}
+        {me && !me.roles.includes("customer") && <FieldSyncStatus owner={me.id} />}
         {me && me.roles.length === 0 ? (
           <div className="rounded-xl border bg-card p-8 text-center">
             <h2 className="text-xl font-bold">بانتظار تحديد الصلاحية</h2>
-            <p className="mt-2 text-muted-foreground">اطلب من المدير تعيين دورك (مندوب، مستودع، سائق).</p>
+            <p className="mt-2 text-muted-foreground">اطلب من المدير تعيين دورك (مندوب، مستودع، سائق، عميل).</p>
+          </div>
+        ) : me && !canAccessPath(me.roles, pathname) ? (
+          <div className="rounded-xl border bg-card p-8 text-center">
+            <h2 className="text-xl font-bold">هذه الواجهة غير متاحة لدورك</h2>
+            <p className="mt-2 text-muted-foreground">لكل حساب واجهته وبياناته فقط.</p>
+            <Button className="mt-4" onClick={() => nav({ to: homeForRoles(me.roles) as any })}>العودة إلى واجهتي</Button>
           </div>
         ) : (
           <Outlet />
         )}
       </main>
-      <nav className="fixed inset-x-0 bottom-0 z-30 flex justify-around border-t bg-card py-2 md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-30 flex justify-start overflow-x-auto border-t bg-card py-2 md:hidden">
         {items.map((n) => (
           <Link
             key={n.to}
             to={n.to as any}
             preload="intent"
-            className="flex flex-col items-center gap-0.5 px-2 text-[11px] text-muted-foreground"
+            className="flex shrink-0 flex-col items-center gap-0.5 px-2 text-[11px] text-muted-foreground"
             activeProps={{ className: "text-primary font-semibold" }}
           >
             <n.icon className="h-5 w-5" />

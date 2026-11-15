@@ -12,16 +12,22 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AuthenticatedAttendanceRouteImport } from './routes/_authenticated/attendance'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authenticated/deliveries'
 import { Route as AuthenticatedDispatchRouteImport } from './routes/_authenticated/dispatch'
 import { Route as AuthenticatedDriverRouteImport } from './routes/_authenticated/driver'
+import { Route as AuthenticatedInvitesRouteImport } from './routes/_authenticated/invites'
 import { Route as AuthenticatedPayrollRouteImport } from './routes/_authenticated/payroll'
+import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
 import { Route as AuthenticatedRepRouteImport } from './routes/_authenticated/rep'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as AuthenticatedVisitsRouteImport } from './routes/_authenticated/visits'
 import { Route as AuthenticatedWarehouseRouteImport } from './routes/_authenticated/warehouse'
+import { Route as InviteCodeRouteImport } from './routes/invite.$code'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -37,9 +43,19 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAttendanceRoute = AuthenticatedAttendanceRouteImport.update({
@@ -52,6 +68,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDeliveriesRoute = AuthenticatedDeliveriesRouteImport.update({
+  id: '/deliveries',
+  path: '/deliveries',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDispatchRoute = AuthenticatedDispatchRouteImport.update({
   id: '/dispatch',
   path: '/dispatch',
@@ -62,9 +83,19 @@ const AuthenticatedDriverRoute = AuthenticatedDriverRouteImport.update({
   path: '/driver',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedInvitesRoute = AuthenticatedInvitesRouteImport.update({
+  id: '/invites',
+  path: '/invites',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPayrollRoute = AuthenticatedPayrollRouteImport.update({
   id: '/payroll',
   path: '/payroll',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedRepRoute = AuthenticatedRepRouteImport.update({
@@ -87,102 +118,146 @@ const AuthenticatedWarehouseRoute = AuthenticatedWarehouseRouteImport.update({
   path: '/warehouse',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const InviteCodeRoute = InviteCodeRouteImport.update({
+  id: '/invite/$code',
+  path: '/invite/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/terms': typeof TermsRoute
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/dispatch': typeof AuthenticatedDispatchRoute
   '/driver': typeof AuthenticatedDriverRoute
+  '/invites': typeof AuthenticatedInvitesRoute
   '/payroll': typeof AuthenticatedPayrollRoute
+  '/portal': typeof AuthenticatedPortalRoute
   '/rep': typeof AuthenticatedRepRoute
   '/team': typeof AuthenticatedTeamRoute
   '/visits': typeof AuthenticatedVisitsRoute
   '/warehouse': typeof AuthenticatedWarehouseRoute
+  '/invite/$code': typeof InviteCodeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/terms': typeof TermsRoute
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/deliveries': typeof AuthenticatedDeliveriesRoute
   '/dispatch': typeof AuthenticatedDispatchRoute
   '/driver': typeof AuthenticatedDriverRoute
+  '/invites': typeof AuthenticatedInvitesRoute
   '/payroll': typeof AuthenticatedPayrollRoute
+  '/portal': typeof AuthenticatedPortalRoute
   '/rep': typeof AuthenticatedRepRoute
   '/team': typeof AuthenticatedTeamRoute
   '/visits': typeof AuthenticatedVisitsRoute
   '/warehouse': typeof AuthenticatedWarehouseRoute
+  '/invite/$code': typeof InviteCodeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/terms': typeof TermsRoute
   '/_authenticated/attendance': typeof AuthenticatedAttendanceRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/deliveries': typeof AuthenticatedDeliveriesRoute
   '/_authenticated/dispatch': typeof AuthenticatedDispatchRoute
   '/_authenticated/driver': typeof AuthenticatedDriverRoute
+  '/_authenticated/invites': typeof AuthenticatedInvitesRoute
   '/_authenticated/payroll': typeof AuthenticatedPayrollRoute
+  '/_authenticated/portal': typeof AuthenticatedPortalRoute
   '/_authenticated/rep': typeof AuthenticatedRepRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/visits': typeof AuthenticatedVisitsRoute
   '/_authenticated/warehouse': typeof AuthenticatedWarehouseRoute
+  '/invite/$code': typeof InviteCodeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
+    | '/privacy'
     | '/reset-password'
+    | '/terms'
     | '/attendance'
     | '/dashboard'
+    | '/deliveries'
     | '/dispatch'
     | '/driver'
+    | '/invites'
     | '/payroll'
+    | '/portal'
     | '/rep'
     | '/team'
     | '/visits'
     | '/warehouse'
+    | '/invite/$code'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/privacy'
     | '/reset-password'
+    | '/terms'
     | '/attendance'
     | '/dashboard'
+    | '/deliveries'
     | '/dispatch'
     | '/driver'
+    | '/invites'
     | '/payroll'
+    | '/portal'
     | '/rep'
     | '/team'
     | '/visits'
     | '/warehouse'
+    | '/invite/$code'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/privacy'
     | '/reset-password'
+    | '/terms'
     | '/_authenticated/attendance'
     | '/_authenticated/dashboard'
+    | '/_authenticated/deliveries'
     | '/_authenticated/dispatch'
     | '/_authenticated/driver'
+    | '/_authenticated/invites'
     | '/_authenticated/payroll'
+    | '/_authenticated/portal'
     | '/_authenticated/rep'
     | '/_authenticated/team'
     | '/_authenticated/visits'
     | '/_authenticated/warehouse'
+    | '/invite/$code'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  TermsRoute: typeof TermsRoute
+  InviteCodeRoute: typeof InviteCodeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -208,11 +283,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/attendance': {
@@ -229,6 +318,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/deliveries': {
+      id: '/_authenticated/deliveries'
+      path: '/deliveries'
+      fullPath: '/deliveries'
+      preLoaderRoute: typeof AuthenticatedDeliveriesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dispatch': {
       id: '/_authenticated/dispatch'
       path: '/dispatch'
@@ -243,11 +339,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDriverRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/invites': {
+      id: '/_authenticated/invites'
+      path: '/invites'
+      fullPath: '/invites'
+      preLoaderRoute: typeof AuthenticatedInvitesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/payroll': {
       id: '/_authenticated/payroll'
       path: '/payroll'
       fullPath: '/payroll'
       preLoaderRoute: typeof AuthenticatedPayrollRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/portal': {
+      id: '/_authenticated/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof AuthenticatedPortalRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/rep': {
@@ -278,15 +388,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWarehouseRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/invite/$code': {
+      id: '/invite/$code'
+      path: '/invite/$code'
+      fullPath: '/invite/$code'
+      preLoaderRoute: typeof InviteCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAttendanceRoute: typeof AuthenticatedAttendanceRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDeliveriesRoute: typeof AuthenticatedDeliveriesRoute
   AuthenticatedDispatchRoute: typeof AuthenticatedDispatchRoute
   AuthenticatedDriverRoute: typeof AuthenticatedDriverRoute
+  AuthenticatedInvitesRoute: typeof AuthenticatedInvitesRoute
   AuthenticatedPayrollRoute: typeof AuthenticatedPayrollRoute
+  AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
   AuthenticatedRepRoute: typeof AuthenticatedRepRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
   AuthenticatedVisitsRoute: typeof AuthenticatedVisitsRoute
@@ -296,9 +416,12 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAttendanceRoute: AuthenticatedAttendanceRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDeliveriesRoute: AuthenticatedDeliveriesRoute,
   AuthenticatedDispatchRoute: AuthenticatedDispatchRoute,
   AuthenticatedDriverRoute: AuthenticatedDriverRoute,
+  AuthenticatedInvitesRoute: AuthenticatedInvitesRoute,
   AuthenticatedPayrollRoute: AuthenticatedPayrollRoute,
+  AuthenticatedPortalRoute: AuthenticatedPortalRoute,
   AuthenticatedRepRoute: AuthenticatedRepRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,
   AuthenticatedVisitsRoute: AuthenticatedVisitsRoute,
@@ -312,7 +435,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  TermsRoute: TermsRoute,
+  InviteCodeRoute: InviteCodeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

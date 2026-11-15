@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { DeleteAccountButton } from "@/components/DeleteAccountButton";
+import { homeForRoles } from "@/lib/access";
+import type { AppRole } from "@/lib/orders";
 
 export const Route = createFileRoute("/reset-password")({
   head: () => ({ meta: [
@@ -41,7 +44,9 @@ function ResetPassword() {
       const { error } = await supabase.auth.updateUser(recovery ? { password } : { password, current_password: current });
       if (error) throw error;
       toast.success("تم تغيير كلمة المرور");
-      nav({ to: "/dashboard" });
+      const { data: userData } = await supabase.auth.getUser();
+      const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", userData.user?.id ?? "");
+      nav({ to: homeForRoles((roles ?? []).map((r) => r.role as AppRole)) as any });
     } catch (error) { toast.error(error instanceof Error ? error.message : (error as { message?: string }).message || "تعذر تغيير كلمة المرور"); }
     finally { setBusy(false); }
   }
@@ -54,7 +59,8 @@ function ResetPassword() {
         <div className="space-y-2"><Label htmlFor="confirm-password">تأكيد كلمة المرور</Label><Input id="confirm-password" type="password" autoComplete="new-password" minLength={6} required value={confirm} onChange={e => setConfirm(e.target.value)} /></div>
         <Button disabled={busy} className="w-full">{busy ? "جارٍ الحفظ..." : "حفظ كلمة المرور"}</Button>
       </> : <p className="text-sm text-muted-foreground">افتح رابط الاستعادة المرسل لبريدك، أو سجّل الدخول لتغيير كلمة المرور.</p>}
-      <Button asChild variant="link"><Link to="/auth">العودة إلى تسجيل الدخول</Link></Button>
+      {ready && !recovery && <div className="border-t pt-4"><p className="mb-3 text-xs text-muted-foreground">حذف الحساب إجراء نهائي ولا يمكن التراجع عنه.</p><DeleteAccountButton /></div>}
+      <div className="flex justify-center gap-3 text-xs"><Button asChild variant="link"><Link to="/auth">العودة لتسجيل الدخول</Link></Button><Button asChild variant="link"><Link to="/privacy">الخصوصية</Link></Button></div>
     </form>
   </main>;
 }

@@ -7,6 +7,7 @@ import { useStaff } from "@/lib/staff";
 import { fmtDate, mapsLink } from "@/lib/orders";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { VisitSummaryButton } from "@/components/VisitSummaryButton";
 
 export const Route = createFileRoute("/_authenticated/visits")({
   head: () => ({ meta: [
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/_authenticated/visits")({
 type V = {
   id: string; created_at: string; has_order: boolean; lat: number | null; lng: number | null;
   note: string | null; photo_path: string | null; rep_id: string;
+  ai_summary: string | null; ai_follow_up: string | null;
   customers: { name: string; phone: string | null; address: string | null } | null;
   url?: string | null;
 };
@@ -107,6 +109,9 @@ function VisitsPage() {
                 <div>المندوب: {nameOf(open.rep_id)}</div>
                 <div>الوقت: {fmtDate(open.created_at)}</div>
                 {open.note && <div>ملاحظة: {open.note}</div>}
+                <VisitSummaryButton visitId={open.id} />
+                {open.ai_summary && <div className="whitespace-pre-wrap rounded-lg bg-muted/50 p-3">الملخص الذكي: {open.ai_summary}</div>}
+                {open.ai_follow_up && <div className="rounded-lg bg-muted/50 p-3">المتابعة المقترحة: {open.ai_follow_up}</div>}
                 {mapsLink(open.lat, open.lng) && (
                   <a className="inline-flex items-center gap-1 text-primary underline" href={mapsLink(open.lat, open.lng)!} target="_blank" rel="noreferrer">
                     <MapPin className="h-4 w-4" /> موقع الزيارة

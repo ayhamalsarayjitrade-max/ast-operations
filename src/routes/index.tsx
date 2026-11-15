@@ -46,6 +46,7 @@ function Index() {
             </div>
           ))}
         </div>
+        <footer className="mt-16 flex flex-wrap gap-4 border-t pt-6 text-sm text-muted-foreground"><Link to="/privacy" className="hover:text-primary">سياسة الخصوصية</Link><Link to="/terms" className="hover:text-primary">شروط الاستخدام</Link><Link to="/auth" search={{ mode: "up" }} className="hover:text-primary">إنشاء حساب</Link></footer>
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { fmtDate, money, ORDER_SELECT } from "@/lib/orders";
 import { OrderCard, type OrderRow } from "@/components/OrderCard";
 import { cachedRead, enqueue, fieldDB, saveDraft, type FieldDraft } from "@/lib/field-store";
+import { VisitSummaryButton } from "@/components/VisitSummaryButton";
 
 export const Route = createFileRoute("/_authenticated/rep")({
   head: () => ({ meta: [
@@ -228,9 +229,11 @@ function RepPage() {
         {myOrders.map((o) => <OrderCard key={o.id} o={o} />)}
         <h2 className="pt-2 font-bold">آخر الزيارات</h2>
         {visits.map((v: any) => (
-          <div key={v.id} className="flex justify-between rounded-lg border bg-card p-3 text-sm">
-            <span>{v.customers?.name} {v.has_order ? "· بطلب" : "· زيارة"}</span>
-            <span className="text-muted-foreground">{fmtDate(v.created_at)}</span>
+          <div key={v.id} className="space-y-2 rounded-lg border bg-card p-3 text-sm">
+            <div className="flex justify-between gap-2"><span>{v.customers?.name} {v.has_order ? "· بطلب" : "· زيارة"}</span><span className="text-muted-foreground">{fmtDate(v.created_at)}</span></div>
+            <VisitSummaryButton visitId={v.id} />
+            {v.ai_summary && <p className="whitespace-pre-wrap text-xs text-muted-foreground">{v.ai_summary}</p>}
+            {v.ai_follow_up && <p className="rounded-md bg-muted/60 p-2 text-xs">المتابعة: {v.ai_follow_up}</p>}
           </div>
         ))}
       </div>

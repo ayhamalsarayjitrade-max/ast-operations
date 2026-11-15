@@ -1,7 +1,12 @@
 # Requested work
-- [x] Durable offline visit/order drafts, photos, and automatic reconnect sync with duplicate protection.
-- [x] Email-based administrator password recovery while keeping secure recovery-code fallback.
-- [x] Improve navigation responsiveness and photo handling.
-- [x] Run 15 targeted tests and authenticated desktop/mobile checks; verify real offline submission, reconnect, atomic order items, duplicate retry, draft restoration, and all staff pages.
+- [ ] Isolate every interface and its data by role, including driver-only orders and customer-only records.
+- [ ] Add customer accounts and a mobile customer portal for ordering and tracking.
+- [ ] Require recipient, photo or signature, time, and location as proof of delivery; add staff review.
+- [ ] Add tracked employee invitation links and an admin performance panel without exposing company data.
+- [ ] Add AI-generated employee WhatsApp invitations through Lovable AI Gateway.
+- [ ] Add a short first-use mobile tour for visits, orders, and delivery statuses.
+- [ ] Add AI visit summaries and useful follow-up suggestions from notes and shop photos.
+- [ ] Add privacy, terms, and secure account-deletion request flows needed for store submission.
+- [ ] Test role boundaries, delivery proof, portal ordering, invitations, AI calls, and responsive pages.
 
-Verification limits: published offline shell requires deployment and a prior online visit. Sync runs while the application is open; closed-app worker sync is not implemented. Recovery email delivery and link consumption require mailbox access; no password was changed during testing. Broad review verified page loading, not every payroll/stock/location operation.
+Verification limits: app-store acceptance cannot be guaranteed; native store packaging/review requires Apple and Google developer accounts and final signing. WhatsApp messages open for user confirmation rather than sending automatically. Background sync still requires the app to be open.

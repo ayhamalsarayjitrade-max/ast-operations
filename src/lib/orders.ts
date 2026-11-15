@@ -28,6 +28,7 @@ export const ROLE_LABEL: Record<AppRole, string> = {
   rep: "مندوب",
   warehouse: "مستودع",
   driver: "سائق",
+  customer: "عميل",
 };
 
 export const ORDER_SELECT =

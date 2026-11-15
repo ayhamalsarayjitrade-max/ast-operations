@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -6,8 +6,14 @@ import { resetAdminAccount } from "@/lib/admin-recovery.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { homeForRoles } from "@/lib/access";
+import type { AppRole } from "@/lib/orders";
 
 export const Route = createFileRoute("/auth")({
+  validateSearch: (input: Record<string, unknown>): { mode?: string; invite?: string } => ({
+    ...(typeof input.mode === "string" ? { mode: input.mode } : {}),
+    ...(typeof input.invite === "string" ? { invite: input.invite } : {}),
+  }),
   head: () => ({
     meta: [
       { title: "تسجيل الدخول — ميدان" },
@@ -23,7 +29,8 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const nav = useNavigate();
-  const [mode, setMode] = useState<"in" | "up" | "admin" | "forgot">("in");
+  const search = Route.useSearch();
+  const [mode, setMode] = useState<"in" | "up" | "admin" | "forgot">(search.mode === "up" ? "up" : "in");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -31,6 +38,12 @@ function AuthPage() {
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+
+  async function goHome() {
+    const { data: userData } = await supabase.auth.getUser();
+    const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", userData.user?.id ?? "");
+    nav({ to: homeForRoles((roles ?? []).map((r) => r.role as AppRole)) as any });
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -46,7 +59,7 @@ function AuthPage() {
       } else if (mode === "in") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        nav({ to: "/dashboard" });
+        await goHome();
       } else if (mode === "up") {
         const { data, error } = await supabase.auth.signUp({
           email,
@@ -54,15 +67,17 @@ function AuthPage() {
           options: { emailRedirectTo: window.location.origin, data: { full_name: name, phone } },
         });
         if (error) throw error;
-        if (data.session) nav({ to: "/dashboard" });
-        else toast.success("تم إنشاء الحساب", { description: "سجّل الدخول الآن." });
+        if (data.session) {
+          if (search.invite) await supabase.rpc("complete_invite_signup", { _code: search.invite });
+          await goHome();
+        } else toast.success("تم إنشاء الحساب", { description: "سجّل الدخول الآن." });
       } else {
         await resetAdminAccount({ data: { code, email, password, name: name || undefined } });
         await supabase.auth.signOut();
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("تم تعيين حساب المدير");
-        nav({ to: "/dashboard" });
+        await goHome();
       }
     } catch (err: any) {
       toast.error(err.message ?? "حدث خطأ");
@@ -124,6 +139,7 @@ function AuthPage() {
             </Button>
           )}
         </div>
+        <div className="flex justify-center gap-3 text-xs"><Link to="/privacy" className="text-muted-foreground underline">الخصوصية</Link><Link to="/terms" className="text-muted-foreground underline">الشروط</Link></div>
       </form>
     </div>
   );

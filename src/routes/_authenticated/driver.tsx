@@ -11,6 +11,7 @@ import { notify } from "@/lib/notify";
 import { OrderCard, type OrderRow } from "@/components/OrderCard";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { DeliveryProofDialog } from "@/components/DeliveryProofDialog";
 
 export const Route = createFileRoute("/_authenticated/driver")({
   head: () => ({ meta: [
@@ -27,6 +28,7 @@ export const Route = createFileRoute("/_authenticated/driver")({
 function DriverPage() {
   const { data: me } = useMe();
   const [sharing, setSharing] = useState(false);
+  const [proofOrder, setProofOrder] = useState<OrderRow | null>(null);
   const watchId = useRef<number | null>(null);
   const lastSent = useRef(0);
 
@@ -98,7 +100,7 @@ function DriverPage() {
                     <Button onClick={() => { setStatus(o.id, "out_for_delivery"); if (!sharing) setSharing(true); }}>استلمت — في الطريق</Button>
                   )}
                   {o.status === "out_for_delivery" && (
-                    <Button className="bg-success text-primary-foreground hover:bg-success/90" onClick={() => confirm("تأكيد التسليم؟") && setStatus(o.id, "delivered")}>تم التسليم</Button>
+                    <Button className="bg-success text-primary-foreground hover:bg-success/90" onClick={() => setProofOrder(o)}>توثيق وإتمام التسليم</Button>
                   )}
                   {map && (
                     <Button variant="outline" asChild>
@@ -111,6 +113,7 @@ function DriverPage() {
           );
         })}
       </div>
+      {me && proofOrder && <DeliveryProofDialog orderId={proofOrder.id} orderNumber={proofOrder.number} driverId={me.id} open={!!proofOrder} onOpenChange={(open) => { if (!open) setProofOrder(null); }} />}
     </div>
   );
 }
