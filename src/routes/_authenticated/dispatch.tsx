@@ -8,10 +8,10 @@ import { OrderCard, type OrderRow } from "@/components/OrderCard";
 
 export const Route = createFileRoute("/_authenticated/dispatch")({
   head: () => ({ meta: [
-    { title: "الإسناد والتتبع — ميدان" },
-    { name: "description", content: "إسناد الطلبات للسائقين ومتابعة مواقعهم ومواعيد التسليم في ميدان." },
-    { property: "og:title", content: "الإسناد والتتبع — ميدان" },
-    { property: "og:description", content: "إسناد الطلبات للسائقين ومتابعة مواقعهم ومواعيد التسليم في ميدان." },
+    { title: "الإسناد والتتبع — أيهم السريجي للتجارة" },
+    { name: "description", content: "إسناد الطلبات للسائقين ومتابعة مواقعهم ومواعيد التسليم في أيهم السريجي للتجارة." },
+    { property: "og:title", content: "الإسناد والتتبع — أيهم السريجي للتجارة" },
+    { property: "og:description", content: "إسناد الطلبات للسائقين ومتابعة مواقعهم ومواعيد التسليم في أيهم السريجي للتجارة." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
   ] }),

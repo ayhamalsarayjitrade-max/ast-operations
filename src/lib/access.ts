@@ -4,12 +4,11 @@ const ROLE_PATHS: Record<Exclude<AppRole, "admin">, string[]> = {
   rep: ["/dashboard", "/rep", "/attendance", "/payroll"],
   warehouse: ["/dashboard", "/warehouse", "/dispatch", "/visits", "/deliveries", "/attendance", "/payroll"],
   driver: ["/driver", "/attendance", "/payroll"],
-  customer: ["/portal"],
+  customer: [],
 };
 
 export function homeForRoles(roles: AppRole[]) {
   if (roles.includes("admin")) return "/dashboard";
-  if (roles.includes("customer")) return "/portal";
   if (roles.includes("driver")) return "/driver";
   if (roles.includes("warehouse")) return "/warehouse";
   if (roles.includes("rep")) return "/rep";

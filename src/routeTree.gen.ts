@@ -22,7 +22,6 @@ import { Route as AuthenticatedDispatchRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedDriverRouteImport } from './routes/_authenticated/driver'
 import { Route as AuthenticatedInvitesRouteImport } from './routes/_authenticated/invites'
 import { Route as AuthenticatedPayrollRouteImport } from './routes/_authenticated/payroll'
-import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
 import { Route as AuthenticatedRepRouteImport } from './routes/_authenticated/rep'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
 import { Route as AuthenticatedVisitsRouteImport } from './routes/_authenticated/visits'
@@ -93,11 +92,6 @@ const AuthenticatedPayrollRoute = AuthenticatedPayrollRouteImport.update({
   path: '/payroll',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
-  id: '/portal',
-  path: '/portal',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedRepRoute = AuthenticatedRepRouteImport.update({
   id: '/rep',
   path: '/rep',
@@ -137,7 +131,6 @@ export interface FileRoutesByFullPath {
   '/driver': typeof AuthenticatedDriverRoute
   '/invites': typeof AuthenticatedInvitesRoute
   '/payroll': typeof AuthenticatedPayrollRoute
-  '/portal': typeof AuthenticatedPortalRoute
   '/rep': typeof AuthenticatedRepRoute
   '/team': typeof AuthenticatedTeamRoute
   '/visits': typeof AuthenticatedVisitsRoute
@@ -157,7 +150,6 @@ export interface FileRoutesByTo {
   '/driver': typeof AuthenticatedDriverRoute
   '/invites': typeof AuthenticatedInvitesRoute
   '/payroll': typeof AuthenticatedPayrollRoute
-  '/portal': typeof AuthenticatedPortalRoute
   '/rep': typeof AuthenticatedRepRoute
   '/team': typeof AuthenticatedTeamRoute
   '/visits': typeof AuthenticatedVisitsRoute
@@ -179,7 +171,6 @@ export interface FileRoutesById {
   '/_authenticated/driver': typeof AuthenticatedDriverRoute
   '/_authenticated/invites': typeof AuthenticatedInvitesRoute
   '/_authenticated/payroll': typeof AuthenticatedPayrollRoute
-  '/_authenticated/portal': typeof AuthenticatedPortalRoute
   '/_authenticated/rep': typeof AuthenticatedRepRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
   '/_authenticated/visits': typeof AuthenticatedVisitsRoute
@@ -201,7 +192,6 @@ export interface FileRouteTypes {
     | '/driver'
     | '/invites'
     | '/payroll'
-    | '/portal'
     | '/rep'
     | '/team'
     | '/visits'
@@ -221,7 +211,6 @@ export interface FileRouteTypes {
     | '/driver'
     | '/invites'
     | '/payroll'
-    | '/portal'
     | '/rep'
     | '/team'
     | '/visits'
@@ -242,7 +231,6 @@ export interface FileRouteTypes {
     | '/_authenticated/driver'
     | '/_authenticated/invites'
     | '/_authenticated/payroll'
-    | '/_authenticated/portal'
     | '/_authenticated/rep'
     | '/_authenticated/team'
     | '/_authenticated/visits'
@@ -353,13 +341,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPayrollRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/portal': {
-      id: '/_authenticated/portal'
-      path: '/portal'
-      fullPath: '/portal'
-      preLoaderRoute: typeof AuthenticatedPortalRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/rep': {
       id: '/_authenticated/rep'
       path: '/rep'
@@ -406,7 +387,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDriverRoute: typeof AuthenticatedDriverRoute
   AuthenticatedInvitesRoute: typeof AuthenticatedInvitesRoute
   AuthenticatedPayrollRoute: typeof AuthenticatedPayrollRoute
-  AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
   AuthenticatedRepRoute: typeof AuthenticatedRepRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
   AuthenticatedVisitsRoute: typeof AuthenticatedVisitsRoute
@@ -421,7 +401,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDriverRoute: AuthenticatedDriverRoute,
   AuthenticatedInvitesRoute: AuthenticatedInvitesRoute,
   AuthenticatedPayrollRoute: AuthenticatedPayrollRoute,
-  AuthenticatedPortalRoute: AuthenticatedPortalRoute,
   AuthenticatedRepRoute: AuthenticatedRepRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,
   AuthenticatedVisitsRoute: AuthenticatedVisitsRoute,

@@ -14,8 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 type Invite = { id: string; code: string; label: string; goal: string | null; clicks: number; active: boolean; invite_signups: { count: number }[] };
 export const Route = createFileRoute("/_authenticated/invites")({
   head: () => ({ meta: [
-    { title: "دعوات الموظفين — ميدان" }, { name: "description", content: "روابط دعوة قابلة للقياس ورسائل واتساب مخصصة للموظفين." },
-    { property: "og:title", content: "دعوات الموظفين — ميدان" }, { property: "og:description", content: "روابط دعوة قابلة للقياس ورسائل واتساب مخصصة للموظفين." },
+    { title: "دعوات الموظفين — أيهم السريجي للتجارة" }, { name: "description", content: "روابط دعوة قابلة للقياس ورسائل واتساب مخصصة للموظفين." },
+    { property: "og:title", content: "دعوات الموظفين — أيهم السريجي للتجارة" }, { property: "og:description", content: "روابط دعوة قابلة للقياس ورسائل واتساب مخصصة للموظفين." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }), component: InvitesPage,
 });

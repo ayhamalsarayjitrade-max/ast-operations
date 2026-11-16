@@ -151,7 +151,7 @@ function Layout() {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-30 border-b bg-card/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
-          <div className="font-bold text-primary">ميدان</div>
+          <div className="font-bold text-primary">أيهم السريجي للتجارة</div>
           <nav className="hidden flex-1 gap-1 md:flex">
             {items.map((n) => (
               <Link

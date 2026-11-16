@@ -11,8 +11,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 type DeliveryOrder = OrderRow & { delivery_proofs: { recipient_name: string; photo_path: string | null; signature_path: string | null; delivered_at: string; lat: number; lng: number } | null };
 export const Route = createFileRoute("/_authenticated/deliveries")({
   head: () => ({ meta: [
-    { title: "إثباتات التسليم — ميدان" }, { name: "description", content: "مراجعة المستلم والصورة أو التوقيع ووقت وموقع كل تسليم." },
-    { property: "og:title", content: "إثباتات التسليم — ميدان" }, { property: "og:description", content: "مراجعة المستلم والصورة أو التوقيع ووقت وموقع كل تسليم." },
+    { title: "إثباتات التسليم — أيهم السريجي للتجارة" }, { name: "description", content: "مراجعة المستلم والصورة أو التوقيع ووقت وموقع كل تسليم." },
+    { property: "og:title", content: "إثباتات التسليم — أيهم السريجي للتجارة" }, { property: "og:description", content: "مراجعة المستلم والصورة أو التوقيع ووقت وموقع كل تسليم." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }), component: DeliveriesPage,
 });

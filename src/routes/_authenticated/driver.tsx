@@ -15,10 +15,10 @@ import { DeliveryProofDialog } from "@/components/DeliveryProofDialog";
 
 export const Route = createFileRoute("/_authenticated/driver")({
   head: () => ({ meta: [
-    { title: "تطبيق السائق — ميدان" },
-    { name: "description", content: "طلبات السائق وتحديث حالات التسليم ومشاركة الموقع في ميدان." },
-    { property: "og:title", content: "تطبيق السائق — ميدان" },
-    { property: "og:description", content: "طلبات السائق وتحديث حالات التسليم ومشاركة الموقع في ميدان." },
+    { title: "تطبيق السائق — أيهم السريجي للتجارة" },
+    { name: "description", content: "طلبات السائق وتحديث حالات التسليم ومشاركة الموقع في أيهم السريجي للتجارة." },
+    { property: "og:title", content: "تطبيق السائق — أيهم السريجي للتجارة" },
+    { property: "og:description", content: "طلبات السائق وتحديث حالات التسليم ومشاركة الموقع في أيهم السريجي للتجارة." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
   ] }),

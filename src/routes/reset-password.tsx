@@ -11,10 +11,10 @@ import type { AppRole } from "@/lib/orders";
 
 export const Route = createFileRoute("/reset-password")({
   head: () => ({ meta: [
-    { title: "تغيير كلمة المرور — ميدان" },
-    { name: "description", content: "استعادة الوصول الآمن إلى حسابك في ميدان وتعيين كلمة مرور جديدة." },
-    { property: "og:title", content: "تغيير كلمة المرور — ميدان" },
-    { property: "og:description", content: "استعادة الوصول الآمن إلى حسابك في ميدان وتعيين كلمة مرور جديدة." },
+    { title: "تغيير كلمة المرور — أيهم السريجي للتجارة" },
+    { name: "description", content: "استعادة الوصول الآمن إلى حسابك في أيهم السريجي للتجارة وتعيين كلمة مرور جديدة." },
+    { property: "og:title", content: "تغيير كلمة المرور — أيهم السريجي للتجارة" },
+    { property: "og:description", content: "استعادة الوصول الآمن إلى حسابك في أيهم السريجي للتجارة وتعيين كلمة مرور جديدة." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }), component: ResetPassword,
 });
@@ -52,7 +52,7 @@ function ResetPassword() {
   }
   return <main className="flex min-h-screen items-center justify-center px-4">
     <form onSubmit={submit} className="w-full max-w-sm space-y-4 rounded-lg border bg-card p-6">
-      <div className="font-bold text-primary">ميدان</div><h1 className="text-2xl font-bold">تغيير كلمة المرور</h1>
+      <div className="font-bold text-primary">أيهم السريجي للتجارة</div><h1 className="text-2xl font-bold">تغيير كلمة المرور</h1>
       {ready ? <>
         {!recovery && <div className="space-y-2"><Label htmlFor="current-password">كلمة المرور الحالية</Label><Input id="current-password" type="password" autoComplete="current-password" required value={current} onChange={e => setCurrent(e.target.value)} /></div>}
         <div className="space-y-2"><Label htmlFor="new-password">كلمة المرور الجديدة</Label><Input id="new-password" type="password" autoComplete="new-password" minLength={6} required value={password} onChange={e => setPassword(e.target.value)} /></div>

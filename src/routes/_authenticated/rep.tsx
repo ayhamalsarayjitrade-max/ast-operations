@@ -17,10 +17,10 @@ import { VisitSummaryButton } from "@/components/VisitSummaryButton";
 
 export const Route = createFileRoute("/_authenticated/rep")({
   head: () => ({ meta: [
-    { title: "تطبيق المندوب — ميدان" },
-    { name: "description", content: "تسجيل زيارات العملاء وصور المحلات وإنشاء الطلبات في ميدان." },
-    { property: "og:title", content: "تطبيق المندوب — ميدان" },
-    { property: "og:description", content: "تسجيل زيارات العملاء وصور المحلات وإنشاء الطلبات في ميدان." },
+    { title: "تطبيق المندوب — أيهم السريجي للتجارة" },
+    { name: "description", content: "تسجيل زيارات العملاء وصور المحلات وإنشاء الطلبات في أيهم السريجي للتجارة." },
+    { property: "og:title", content: "تطبيق المندوب — أيهم السريجي للتجارة" },
+    { property: "og:description", content: "تسجيل زيارات العملاء وصور المحلات وإنشاء الطلبات في أيهم السريجي للتجارة." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
   ] }),

@@ -7,9 +7,9 @@ export const Route = createFileRoute("/")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { title: "ميدان — المناديب والمستودعات والتوصيل" },
+      { title: "أيهم السريجي للتجارة — المناديب والمستودعات والتوصيل" },
       { name: "description", content: "سجّل زيارات العملاء، جهّز الطلبات من المستودع، وتابع السائقين لحظياً." },
-      { property: "og:title", content: "ميدان — المناديب والمستودعات والتوصيل" },
+      { property: "og:title", content: "أيهم السريجي للتجارة — المناديب والمستودعات والتوصيل" },
       { property: "og:description", content: "سجّل زيارات العملاء، جهّز الطلبات من المستودع، وتابع السائقين لحظياً." },
     ],
   }),
@@ -27,7 +27,7 @@ function Index() {
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-5xl px-6 py-16">
-        <div className="text-sm font-semibold text-primary">ميدان</div>
+        <div className="text-sm font-semibold text-primary">أيهم السريجي للتجارة</div>
         <h1 className="mt-3 max-w-2xl text-4xl font-bold leading-tight md:text-5xl">
           من زيارة المندوب حتى باب العميل — في نظام واحد لحظي.
         </h1>

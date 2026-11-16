@@ -15,7 +15,7 @@ export const generateInviteMessage = createServerFn({ method: "POST" })
     const output = await generateStructured(getRequest(), {
       apiKey,
       schema: z.object({ message: z.string() }),
-      instructions: "أنشئ رسالة واتساب عربية قصيرة ومهنية لدعوة موظف لاستخدام تطبيق ميدان. لا تخترع اسماً للشركة أو مزايا غير مذكورة. اجعل الرابط في سطر مستقل ولا تضف أي بيانات سرية أو تشغيلية.",
+      instructions: "أنشئ رسالة واتساب عربية قصيرة ومهنية لدعوة موظف لاستخدام تطبيق أيهم السريجي للتجارة. لا تخترع اسماً للشركة أو مزايا غير مذكورة. اجعل الرابط في سطر مستقل ولا تضف أي بيانات سرية أو تشغيلية.",
       messages: [{ role: "user", content: `هدف الدعوة: ${data.goal}\nنبرة الرسالة: ${data.tone}\nرابط الدعوة: ${data.inviteUrl}\nاكتب رسالة واحدة جاهزة للإرسال.` }],
     });
     return output;
@@ -35,7 +35,7 @@ export const summarizeVisit = createServerFn({ method: "POST" })
     const output = await generateStructured(getRequest(), {
       apiKey,
       schema: z.object({ summary: z.string(), follow_up: z.string() }),
-      instructions: "لخّص زيارة مندوب ميداني بالعربية بدقة من الملاحظات والصورة فقط. لا تختلق نتائج أو التزامات. اقترح متابعة واحدة عملية ومفيدة، واذكر عند نقص المعلومات بدلاً من افتراضها.",
+      instructions: "لخّص زيارة مندوب أيهم السريجي للتجارةي بالعربية بدقة من الملاحظات والصورة فقط. لا تختلق نتائج أو التزامات. اقترح متابعة واحدة عملية ومفيدة، واذكر عند نقص المعلومات بدلاً من افتراضها.",
       messages: [{ role: "user", content: [
         { type: "text", text: `العميل: ${visit.customers?.name ?? "غير مسمى"}\nوقت الزيارة: ${visit.created_at}\nملاحظات المندوب: ${visit.note || "لا توجد ملاحظات"}\nأنشئ ملخصاً من ثلاث نقاط كحد أقصى واقتراح متابعة واضح.` },
         ...(imageUrl ? [{ type: "image" as const, image: new URL(imageUrl) }] : []),

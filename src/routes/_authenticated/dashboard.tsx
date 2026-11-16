@@ -12,10 +12,10 @@ import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [
-    { title: "لوحة التحكم — ميدان" },
-    { name: "description", content: "ملخص زيارات اليوم والطلبات والمبيعات والتوصيل في ميدان." },
-    { property: "og:title", content: "لوحة التحكم — ميدان" },
-    { property: "og:description", content: "ملخص زيارات اليوم والطلبات والمبيعات والتوصيل في ميدان." },
+    { title: "لوحة التحكم — أيهم السريجي للتجارة" },
+    { name: "description", content: "ملخص زيارات اليوم والطلبات والمبيعات والتوصيل في أيهم السريجي للتجارة." },
+    { property: "og:title", content: "لوحة التحكم — أيهم السريجي للتجارة" },
+    { property: "og:description", content: "ملخص زيارات اليوم والطلبات والمبيعات والتوصيل في أيهم السريجي للتجارة." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
   ] }),
@@ -54,7 +54,7 @@ function Dashboard() {
   const repIds = Array.from(new Set(visits.map((v: any) => v.rep_id)));
   const driverIds = Array.from(new Set(orders.map((o: any) => o.driver_id).filter(Boolean)));
   const report = [
-    `📊 *تقرير ميدان — ${new Date().toLocaleDateString("ar", { dateStyle: "full" })}*`,
+    `📊 *تقرير أيهم السريجي للتجارة — ${new Date().toLocaleDateString("ar", { dateStyle: "full" })}*`,
     "",
     ...stats.map((s) => `• ${s.l}: *${s.v}*`),
     `• نسبة التحويل: *${visits.length ? Math.round((visits.filter((v) => v.has_order).length / visits.length) * 100) : 0}%*`,

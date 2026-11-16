@@ -16,10 +16,10 @@ export const Route = createFileRoute("/auth")({
   }),
   head: () => ({
     meta: [
-      { title: "تسجيل الدخول — ميدان" },
-      { name: "description", content: "الدخول إلى نظام ميدان للمبيعات والتوصيل." },
-      { property: "og:title", content: "تسجيل الدخول — ميدان" },
-      { property: "og:description", content: "الدخول إلى نظام ميدان للمبيعات والتوصيل." },
+      { title: "تسجيل الدخول — أيهم السريجي للتجارة" },
+      { name: "description", content: "الدخول إلى نظام أيهم السريجي للتجارة للمبيعات والتوصيل." },
+      { property: "og:title", content: "تسجيل الدخول — أيهم السريجي للتجارة" },
+      { property: "og:description", content: "الدخول إلى نظام أيهم السريجي للتجارة للمبيعات والتوصيل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -92,7 +92,7 @@ function AuthPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <form onSubmit={submit} className="w-full max-w-sm space-y-4 rounded-2xl border bg-card p-6 shadow-sm">
         <div>
-          <div className="text-sm font-semibold text-primary">ميدان</div>
+          <div className="text-sm font-semibold text-primary">أيهم السريجي للتجارة</div>
           <h1 className="text-2xl font-bold">{title}</h1>
           {mode === "forgot" && <p className="mt-2 text-sm text-muted-foreground">{sent ? "إذا كان البريد مرتبطاً بحساب، سيصلك رابط آمن لتعيين كلمة مرور جديدة. تحقق أيضاً من البريد غير المرغوب." : "أدخل بريد حساب المدير أو الموظف لاستلام رابط تعيين كلمة مرور جديدة، دون رمز استعادة."}</p>}
           {mode === "admin" && (

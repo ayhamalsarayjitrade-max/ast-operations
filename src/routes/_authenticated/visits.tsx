@@ -11,10 +11,10 @@ import { VisitSummaryButton } from "@/components/VisitSummaryButton";
 
 export const Route = createFileRoute("/_authenticated/visits")({
   head: () => ({ meta: [
-    { title: "الزيارات الميدانية — ميدان" },
-    { name: "description", content: "تصفح الزيارات الميدانية وصور المحلات وبيانات العملاء في ميدان." },
-    { property: "og:title", content: "الزيارات الميدانية — ميدان" },
-    { property: "og:description", content: "تصفح الزيارات الميدانية وصور المحلات وبيانات العملاء في ميدان." },
+    { title: "الزيارات الأيهم السريجي للتجارةية — أيهم السريجي للتجارة" },
+    { name: "description", content: "تصفح الزيارات الأيهم السريجي للتجارةية وصور المحلات وبيانات العملاء في أيهم السريجي للتجارة." },
+    { property: "og:title", content: "الزيارات الأيهم السريجي للتجارةية — أيهم السريجي للتجارة" },
+    { property: "og:description", content: "تصفح الزيارات الأيهم السريجي للتجارةية وصور المحلات وبيانات العملاء في أيهم السريجي للتجارة." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
   ] }),
@@ -65,7 +65,7 @@ function VisitsPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold">الزيارات الميدانية</h1>
+        <h1 className="text-2xl font-bold">الزيارات الأيهم السريجي للتجارةية</h1>
         <p className="text-sm text-muted-foreground">
           {list.length} زيارة · {list.filter((v) => v.has_order).length} بطلب
         </p>

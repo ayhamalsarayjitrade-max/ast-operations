@@ -13,9 +13,9 @@ import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_authenticated/payroll")({
   head: () => ({ meta: [
-    { title: "الموارد البشرية والرواتب — ميدان" },
+    { title: "الموارد البشرية والرواتب — أيهم السريجي للتجارة" },
     { name: "description", content: "الحضور والإجازات والبدلات والخصومات ومسير الرواتب." },
-    { property: "og:title", content: "الموارد البشرية والرواتب — ميدان" },
+    { property: "og:title", content: "الموارد البشرية والرواتب — أيهم السريجي للتجارة" },
     { property: "og:description", content: "الحضور والإجازات والبدلات والخصومات ومسير الرواتب." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },

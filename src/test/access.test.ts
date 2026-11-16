@@ -6,15 +6,12 @@ describe("role interface isolation", () => {
     expect(canAccessPath(["driver"], "/driver")).toBe(true);
     expect(canAccessPath(["driver"], "/rep")).toBe(false);
     expect(canAccessPath(["driver"], "/warehouse")).toBe(false);
-    expect(canAccessPath(["driver"], "/portal")).toBe(false);
   });
-  it("restricts a customer to the customer portal", () => {
-    expect(canAccessPath(["customer"], "/portal")).toBe(true);
+  it("gives the removed customer role no interface", () => {
+    expect(canAccessPath(["customer"], "/portal")).toBe(false);
     expect(canAccessPath(["customer"], "/dashboard")).toBe(false);
-    expect(canAccessPath(["customer"], "/driver")).toBe(false);
   });
-  it("sends customers and drivers directly to their own home interfaces", () => {
-    expect(homeForRoles(["customer"])).toBe("/portal");
+  it("sends drivers directly to their own home interface", () => {
     expect(homeForRoles(["driver"])).toBe("/driver");
   });
   it("keeps administration available to admins", () => {

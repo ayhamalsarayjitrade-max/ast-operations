@@ -20,7 +20,7 @@ export function UpdateRecoveryScreen({ onRetry, onClose }: { onRetry: () => Prom
 
   return (
     <section dir="rtl" aria-labelledby="update-recovery-title" className="mx-auto flex min-h-screen w-full max-w-xl flex-col justify-center px-6 py-12 text-foreground">
-      <span className="mb-8 text-lg font-bold text-primary">ميدان</span>
+      <span className="mb-8 text-lg font-bold text-primary">أيهم السريجي للتجارة</span>
       <DownloadCloud className="mb-5 h-12 w-12 text-primary" aria-hidden="true" />
       <h1 id="update-recovery-title" className="text-2xl font-bold">تعذّر تحميل ملفات التطبيق</h1>
       <p className="mt-4 leading-7 text-muted-foreground">قد يكون التطبيق قد تحدّث بينما يحتفظ المتصفح بملفات قديمة، أو انقطع الاتصال أثناء تحميلها.</p>

@@ -13,9 +13,9 @@ import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_authenticated/attendance")({
   head: () => ({ meta: [
-    { title: "الحضور والانصراف — ميدان" },
+    { title: "الحضور والانصراف — أيهم السريجي للتجارة" },
     { name: "description", content: "تسجيل الحضور والانصراف بالموقع وطلبات الإجازة." },
-    { property: "og:title", content: "الحضور والانصراف — ميدان" },
+    { property: "og:title", content: "الحضور والانصراف — أيهم السريجي للتجارة" },
     { property: "og:description", content: "تسجيل الحضور والانصراف بالموقع وطلبات الإجازة." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
