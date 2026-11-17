@@ -19,3 +19,17 @@ describe("role interface isolation", () => {
     expect(canAccessPath(["admin"], "/team")).toBe(true);
   });
 });
+
+describe("salaries and company totals stay with the manager", () => {
+  it("blocks reps and drivers from payroll, team, invites and the company dashboard", () => {
+    for (const p of ["/payroll", "/team", "/invites", "/dashboard"]) {
+      expect(canAccessPath(["rep"], p)).toBe(false);
+      expect(canAccessPath(["driver"], p)).toBe(false);
+    }
+    expect(canAccessPath(["warehouse"], "/payroll")).toBe(false);
+  });
+  it("lets reps write customer messages but not drivers", () => {
+    expect(canAccessPath(["rep"], "/messages")).toBe(true);
+    expect(canAccessPath(["driver"], "/messages")).toBe(false);
+  });
+});

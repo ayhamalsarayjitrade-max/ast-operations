@@ -64,6 +64,13 @@
       "when": 1794831180175,
       "tag": "0008_bind_shop_photo_reads_to_owner",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794881325140,
+      "tag": "0009_ai_customer_message_examples",
+      "breakpoints": true
     }
   ]
 }

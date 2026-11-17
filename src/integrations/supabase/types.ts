@@ -308,6 +308,30 @@ export type Database = {
         }
         Relationships: []
       }
+      message_examples: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string
+          id: string
+          product_name: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          product_name?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          product_name?: string | null
+        }
+        Relationships: []
+      }
       order_events: {
         Row: {
           actor: string | null
