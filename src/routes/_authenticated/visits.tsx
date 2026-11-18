@@ -1,3 +1,4 @@
+import { ExportBar } from "@/components/ExportBar";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -11,10 +12,10 @@ import { VisitSummaryButton } from "@/components/VisitSummaryButton";
 
 export const Route = createFileRoute("/_authenticated/visits")({
   head: () => ({ meta: [
-    { title: "الزيارات الأيهم السريجي للتجارةية — أيهم السريجي للتجارة" },
-    { name: "description", content: "تصفح الزيارات الأيهم السريجي للتجارةية وصور المحلات وبيانات العملاء في أيهم السريجي للتجارة." },
-    { property: "og:title", content: "الزيارات الأيهم السريجي للتجارةية — أيهم السريجي للتجارة" },
-    { property: "og:description", content: "تصفح الزيارات الأيهم السريجي للتجارةية وصور المحلات وبيانات العملاء في أيهم السريجي للتجارة." },
+    { title: "الزيارات الميدانية — أيهم السريجي للتجارة" },
+    { name: "description", content: "تصفح الزيارات الميدانية وصور المحلات وبيانات العملاء في أيهم السريجي للتجارة." },
+    { property: "og:title", content: "الزيارات الميدانية — أيهم السريجي للتجارة" },
+    { property: "og:description", content: "تصفح الزيارات الميدانية وصور المحلات وبيانات العملاء في أيهم السريجي للتجارة." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
   ] }),
@@ -65,10 +66,12 @@ function VisitsPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold">الزيارات الأيهم السريجي للتجارةية</h1>
+        <h1 className="text-2xl font-bold">الزيارات الميدانية</h1>
         <p className="text-sm text-muted-foreground">
           {list.length} زيارة · {list.filter((v) => v.has_order).length} بطلب
         </p>
+        <div className="mt-2"><ExportBar title={`الزيارات الميدانية ${day}`} file="visits" headers={["العميل", "الهاتف", "المندوب", "الوقت", "بطلب", "ملاحظات"]}
+          rows={() => list.map((v) => [v.customers?.name, v.customers?.phone, nameOf(v.rep_id), new Date(v.created_at).toLocaleString(), v.has_order ? "نعم" : "لا", v.note])} /></div>
       </div>
       <div className="flex flex-wrap gap-2">
         <Input type="date" className="w-44" value={day} onChange={(e) => setDay(e.target.value)} />

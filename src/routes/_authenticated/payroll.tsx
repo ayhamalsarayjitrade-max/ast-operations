@@ -10,6 +10,7 @@ import { calcPayroll, curMonth, DEFAULT_PAY, fmtH, money, monthRange, LEAVE_LABE
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ExportBar } from "@/components/ExportBar";
 
 export const Route = createFileRoute("/_authenticated/payroll")({
   head: () => ({ meta: [
@@ -69,6 +70,8 @@ function PayrollPage() {
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-2xl font-bold">الموارد البشرية والرواتب</h1>
         <Input type="month" className="w-44" value={month} onChange={(e) => setMonth(e.target.value)} />
+        <ExportBar title={`مسير رواتب ${month}`} file={`payroll-${month}`} headers={["الموظف", "أيام الحضور", "الساعات", "الإضافي (س)", "البدلات", "الإجمالي", "الخصومات", "الصافي"]}
+          rows={() => rows.map(({ s, r }) => [s.full_name, r.present, Number(r.hours.toFixed(2)), Number(r.overtimeH.toFixed(2)), r.allowances, r.gross, r.deductions, r.net])} />
       </div>
       <div className="flex flex-wrap gap-2">
         {([["run", "مسير الرواتب"], ["today", "سجل الحضور"], ["leaves", "الإجازات"], ["settings", "الرواتب والبدلات"]] as const).map(([k, v]) => (

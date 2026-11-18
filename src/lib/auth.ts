@@ -7,6 +7,7 @@ export function useMe() {
   return useQuery({
     queryKey: ["me"],
     networkMode: "always",
+    staleTime: 5 * 60_000,
     queryFn: async () => {
       const { data: session } = await supabase.auth.getSession();
       if (!session.session) return null;

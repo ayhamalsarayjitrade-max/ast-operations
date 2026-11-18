@@ -6,7 +6,7 @@ import { installUpdateRecovery } from "./lib/update-recovery";
 if (typeof window !== "undefined") installUpdateRecovery(window);
 
 export const getRouter = () => {
-  const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 30_000, retry: 1 } } });
+  const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 60_000, gcTime: 10 * 60_000, retry: 1, refetchOnWindowFocus: false } } });
 
   const router = createRouter({
     routeTree,

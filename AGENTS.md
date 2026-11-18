@@ -18,3 +18,8 @@
 - Offline app shell uses generateSW only in published non-preview contexts; why: keep editor updates safe while allowing previously visited pages offline.
 - Offline navigation may restore an existing session locally, but every queued write revalidates identity and runs under database RLS; why: cached role display cannot authorize writes.
 - Password recovery uses Cloud Auth email links on a public reset page, with recovery-code fallback retained; why: no anonymous account takeover or recovery secrets exposed.
+- Screen access is decided only by canAccessPath in src/lib/access.ts; nav lists and the layout guard both derive from it, and admin-only screens hold company totals and salaries; why: one source of truth for role isolation (RLS still enforces data).
+- Mobile shell uses a role-specific bottom bar of at most 3 screens plus a grouped side menu; why: large tap targets for field staff.
+- UI language comes from src/lib/i18n.ts (?lang, saved choice, then device language), applied after hydration; why: invited staff see their own language automatically.
+- Camera photos are compressed in the browser before drafting or upload; why: keep IndexedDB small and sync fast on weak networks.
+- AI customer messages learn style from staff-sent examples stored in message_examples and open WhatsApp on the sender's device; why: no business API needed, the model adapts to the company over time.

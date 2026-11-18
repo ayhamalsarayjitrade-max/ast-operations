@@ -1,4 +1,4 @@
-import { openDB, type DBSchema } from "idb";
+import { openDB, type DBSchema, type IDBPDatabase } from "idb";
 
 export type FieldDraft = {
   customerId: string; newName: string; newPhone: string; address: string;
@@ -14,10 +14,18 @@ interface FieldDB extends DBSchema {
   outbox: { key: string; value: FieldRecord };
   cache: { key: string; value: unknown };
 }
+// Reuse one open connection; reopening IndexedDB on every read made the app slower over time.
+let dbPromise: Promise<IDBPDatabase<FieldDB>> | null = null;
 export function fieldDB() {
-  return openDB<FieldDB>("midan-field-v1", 1, {
+  dbPromise ??= openDB<FieldDB>("midan-field-v1", 1, {
     upgrade(db) { db.createObjectStore("drafts"); db.createObjectStore("outbox"); db.createObjectStore("cache"); },
+    terminated() { dbPromise = null; },
+  }).then((db) => {
+    const close = db.close.bind(db);
+    db.close = () => { dbPromise = null; close(); };
+    return db;
   });
+  return dbPromise;
 }
 export async function saveDraft(owner: string, draft: FieldDraft) {
   const db = await fieldDB(); await db.put("drafts", draft, owner);

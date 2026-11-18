@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { money, ORDER_SELECT } from "@/lib/orders";
 import { setStatus } from "@/lib/order-actions";
 import { OrderCard, type OrderRow } from "@/components/OrderCard";
+import { ExportBar } from "@/components/ExportBar";
 
 export const Route = createFileRoute("/_authenticated/warehouse")({
   head: () => ({ meta: [
@@ -85,6 +86,8 @@ function WarehousePage() {
         </div>
       </TabsContent>
       <TabsContent value="products" className="mt-4 space-y-4">
+        <ExportBar title="جرد المستودع" file="inventory" headers={["المنتج", "الرمز", "الوحدة", "السعر", "المتوفر"]}
+          rows={() => products.map((x) => [x.name, x.sku, x.unit, Number(x.price), Number(x.stock)])} />
         <form onSubmit={addProduct} className="grid gap-2 rounded-xl border bg-card p-4 sm:grid-cols-5">
           <Input required placeholder="اسم المنتج" value={p.name} onChange={(e) => setP({ ...p, name: e.target.value })} className="sm:col-span-2" />
           <Input placeholder="الرمز" value={p.sku} onChange={(e) => setP({ ...p, sku: e.target.value })} />

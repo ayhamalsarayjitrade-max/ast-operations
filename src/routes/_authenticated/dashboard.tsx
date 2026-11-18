@@ -9,6 +9,7 @@ import { ORDER_SELECT, STATUS_LABEL, fmtDate, money, type OrderStatus } from "@/
 import { StatusBadge, type OrderRow } from "@/components/OrderCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ExportBar } from "@/components/ExportBar";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [
@@ -90,6 +91,8 @@ function Dashboard() {
           </div>
         ))}
       </div>
+      <ExportBar title="طلبات اليوم" file="orders-today" headers={["#", "العميل", "الهاتف", "الحالة", "المندوب", "السائق", "موعد التسليم", "الإجمالي"]}
+        rows={() => orders.map((o: any) => [o.number, o.customers?.name, o.customers?.phone, STATUS_LABEL[o.status as OrderStatus], nameOf(o.rep_id), nameOf(o.driver_id), fmtDate(o.delivery_at), Number(o.total)])} />
       <div className="flex flex-wrap gap-2">
         {hasRole(me, "rep") && <Button asChild><Link to="/rep">زيارة جديدة</Link></Button>}
         {hasRole(me, "warehouse") && <Button asChild variant="secondary"><Link to="/warehouse">تجهيز الطلبات</Link></Button>}

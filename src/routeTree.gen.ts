@@ -21,6 +21,7 @@ import { Route as AuthenticatedDeliveriesRouteImport } from './routes/_authentic
 import { Route as AuthenticatedDispatchRouteImport } from './routes/_authenticated/dispatch'
 import { Route as AuthenticatedDriverRouteImport } from './routes/_authenticated/driver'
 import { Route as AuthenticatedInvitesRouteImport } from './routes/_authenticated/invites'
+import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
 import { Route as AuthenticatedPayrollRouteImport } from './routes/_authenticated/payroll'
 import { Route as AuthenticatedRepRouteImport } from './routes/_authenticated/rep'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/team'
@@ -87,6 +88,11 @@ const AuthenticatedInvitesRoute = AuthenticatedInvitesRouteImport.update({
   path: '/invites',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMessagesRoute = AuthenticatedMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPayrollRoute = AuthenticatedPayrollRouteImport.update({
   id: '/payroll',
   path: '/payroll',
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/dispatch': typeof AuthenticatedDispatchRoute
   '/driver': typeof AuthenticatedDriverRoute
   '/invites': typeof AuthenticatedInvitesRoute
+  '/messages': typeof AuthenticatedMessagesRoute
   '/payroll': typeof AuthenticatedPayrollRoute
   '/rep': typeof AuthenticatedRepRoute
   '/team': typeof AuthenticatedTeamRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/dispatch': typeof AuthenticatedDispatchRoute
   '/driver': typeof AuthenticatedDriverRoute
   '/invites': typeof AuthenticatedInvitesRoute
+  '/messages': typeof AuthenticatedMessagesRoute
   '/payroll': typeof AuthenticatedPayrollRoute
   '/rep': typeof AuthenticatedRepRoute
   '/team': typeof AuthenticatedTeamRoute
@@ -170,6 +178,7 @@ export interface FileRoutesById {
   '/_authenticated/dispatch': typeof AuthenticatedDispatchRoute
   '/_authenticated/driver': typeof AuthenticatedDriverRoute
   '/_authenticated/invites': typeof AuthenticatedInvitesRoute
+  '/_authenticated/messages': typeof AuthenticatedMessagesRoute
   '/_authenticated/payroll': typeof AuthenticatedPayrollRoute
   '/_authenticated/rep': typeof AuthenticatedRepRoute
   '/_authenticated/team': typeof AuthenticatedTeamRoute
@@ -191,6 +200,7 @@ export interface FileRouteTypes {
     | '/dispatch'
     | '/driver'
     | '/invites'
+    | '/messages'
     | '/payroll'
     | '/rep'
     | '/team'
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/dispatch'
     | '/driver'
     | '/invites'
+    | '/messages'
     | '/payroll'
     | '/rep'
     | '/team'
@@ -230,6 +241,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dispatch'
     | '/_authenticated/driver'
     | '/_authenticated/invites'
+    | '/_authenticated/messages'
     | '/_authenticated/payroll'
     | '/_authenticated/rep'
     | '/_authenticated/team'
@@ -334,6 +346,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedInvitesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/messages': {
+      id: '/_authenticated/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof AuthenticatedMessagesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/payroll': {
       id: '/_authenticated/payroll'
       path: '/payroll'
@@ -386,6 +405,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDispatchRoute: typeof AuthenticatedDispatchRoute
   AuthenticatedDriverRoute: typeof AuthenticatedDriverRoute
   AuthenticatedInvitesRoute: typeof AuthenticatedInvitesRoute
+  AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
   AuthenticatedPayrollRoute: typeof AuthenticatedPayrollRoute
   AuthenticatedRepRoute: typeof AuthenticatedRepRoute
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
@@ -400,6 +420,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDispatchRoute: AuthenticatedDispatchRoute,
   AuthenticatedDriverRoute: AuthenticatedDriverRoute,
   AuthenticatedInvitesRoute: AuthenticatedInvitesRoute,
+  AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
   AuthenticatedPayrollRoute: AuthenticatedPayrollRoute,
   AuthenticatedRepRoute: AuthenticatedRepRoute,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,

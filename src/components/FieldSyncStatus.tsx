@@ -37,7 +37,7 @@ export function FieldSyncStatus({ owner }: { owner: string }) {
     window.addEventListener("online", onOnline);
     window.addEventListener("offline", onQueue);
     window.addEventListener("field-sync-now", onOnline);
-    const timer = window.setInterval(sync, 30000);
+    const timer = window.setInterval(sync, 20000);
     return () => { disposed = true; clearInterval(timer); window.removeEventListener("field-outbox", onQueue); window.removeEventListener("online", onOnline); window.removeEventListener("offline", onQueue); window.removeEventListener("field-sync-now", onOnline); };
   }, [owner, qc]);
   if (online && count === 0) return null;

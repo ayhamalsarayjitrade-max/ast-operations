@@ -30,10 +30,13 @@ export async function syncFieldQueue(owner: string, send = uploadFieldRecord) {
   let sent = 0;
   try {
     const db = await fieldDB();
-    for (const record of await queued(owner)) {
-      // Never submit a previous user's records under a new session.
-      const { data } = await supabase.auth.getUser();
-      if (data.user?.id !== owner || !navigator.onLine) break;
+    const records = await queued(owner);
+    if (!records.length) return 0;
+    // Never submit a previous user's records under a new session (verified with the server once per run).
+    const { data } = await supabase.auth.getUser();
+    if (data.user?.id !== owner) return 0;
+    for (const record of records) {
+      if (!navigator.onLine) break;
       try {
         await send(record);
         await db.delete("outbox", record.id);

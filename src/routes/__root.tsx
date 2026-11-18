@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
+import { initLang } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { UpdateRecoveryOverlay, UpdateRecoveryScreen } from "@/components/UpdateRecovery";
 import { isAppFileLoadError } from "@/lib/update-recovery";
@@ -117,9 +118,15 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
   useEffect(() => {
+    initLang();
     void setupOfflineShell().catch(() => undefined);
-    const { data } = supabase.auth.onAuthStateChange((event) => {
-      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+    // Only refetch when the signed-in person actually changes; token refreshes and tab focus must not reload everything.
+    let lastUser: string | null | undefined;
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+      const uid = session?.user.id ?? null;
+      if (lastUser === undefined) { lastUser = uid; return; }
+      if (uid === lastUser && event !== "USER_UPDATED") return;
+      lastUser = uid;
       router.invalidate();
       if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
       else queryClient.clear();

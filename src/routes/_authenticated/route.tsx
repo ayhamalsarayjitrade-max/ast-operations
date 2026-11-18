@@ -160,6 +160,9 @@ function Layout() {
     else toast.error("الإشعارات مرفوضة — فعّلها من إعدادات المتصفح");
   }
 
+  // Opening a screen outside your role (old shortcut, shared link) goes straight to your own home screen.
+  const blocked = !!me && me.roles.length > 0 && !canAccessPath(me.roles, pathname);
+  useEffect(() => { if (blocked && me) nav({ to: homeForRoles(me.roles) as any, replace: true }); }, [blocked, me, nav]);
   const items = me ? NAV.filter((n) => canAccessPath(me.roles, n.to)) : [];
   const primary = me ? primaryFor(me.roles).map((to) => items.find((i) => i.to === to)).filter(Boolean) as NavItem[] : [];
   const groups: [NavItem["group"], TKey][] = [["field", "g_field"], ["ops", "g_ops"], ["people", "g_people"]];

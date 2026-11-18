@@ -14,6 +14,7 @@ import { fmtDate, money, ORDER_SELECT } from "@/lib/orders";
 import { OrderCard, type OrderRow } from "@/components/OrderCard";
 import { cachedRead, enqueue, fieldDB, saveDraft, type FieldDraft } from "@/lib/field-store";
 import { VisitSummaryButton } from "@/components/VisitSummaryButton";
+import { compressPhoto } from "@/lib/photo";
 
 export const Route = createFileRoute("/_authenticated/rep")({
   head: () => ({ meta: [
@@ -192,7 +193,7 @@ function RepPage() {
           </Button>
           <label className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-md border text-sm font-medium hover:bg-muted">
             <Camera className="h-4 w-4" /> {photo ? "تم التقاط الصورة ✓" : "صورة المحل"}
-            <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => setPhoto(e.target.files?.[0] ?? null)} />
+            <input type="file" accept="image/*" capture="environment" className="hidden" onChange={async (e) => { const f = e.target.files?.[0]; setPhoto(f ? await compressPhoto(f) : null); }} />
           </label>
         </div>
         {photoUrl && <img src={photoUrl} alt="صورة المحل" className="h-40 w-full rounded-lg object-cover" />}
