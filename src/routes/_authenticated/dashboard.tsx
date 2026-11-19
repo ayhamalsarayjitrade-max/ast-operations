@@ -25,7 +25,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function Dashboard() {
   const { data: me } = useMe();
-  const [waPhone, setWaPhone] = useState("");
+  const [waPhone, setWaPhone] = useState("96897021670");
   const start = new Date();
   start.setHours(0, 0, 0, 0);
   const { data: orders = [] } = useQuery({
@@ -103,8 +103,8 @@ function Dashboard() {
       {me?.roles.includes("admin") && (
         <div className="flex flex-wrap items-center gap-2 rounded-xl border bg-card p-4">
           <MessageCircle className="h-5 w-5 text-success" />
-          <span className="font-semibold">إرسال تقرير اليوم على واتساب</span>
-          <Input dir="ltr" placeholder="9665xxxxxxxx" className="w-44" value={waPhone} onChange={(e) => setWaPhone(e.target.value)} />
+          <span className="font-semibold">إرسال ملخص المبيعات لواتساب الإدارة</span>
+          <Input dir="ltr" placeholder="96897021670" className="w-44" value={waPhone} onChange={(e) => setWaPhone(e.target.value)} />
           <Button asChild variant="outline">
             <a href={`https://wa.me/${waPhone.replace(/\D/g, "")}?text=${encodeURIComponent(report)}`} target="_blank" rel="noreferrer">إرسال</a>
           </Button>

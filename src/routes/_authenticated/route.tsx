@@ -15,6 +15,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { InstallBanner, InstallCard } from "@/components/InstallApp";
 import { LANGS, setLang, useLang, type TKey } from "@/lib/i18n";
 
+export const COMPANY_WHATSAPP = "96897021670";
+
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
@@ -113,7 +115,18 @@ function Layout() {
         else if (p.eventType === "UPDATE" && n.user_id === m.id) notify("تحديث طلب الإجازة", n.status === "approved" ? "تم قبول إجازتك" : "تم رفض إجازتك", n.status === "approved" ? "success" : "info");
       })
       .subscribe();
+    // Phone woke up or app returned to foreground: refresh live data and reconnect realtime if it dropped.
+    const onWake = () => {
+      if (document.visibilityState !== "visible") return;
+      qc.invalidateQueries({ queryKey: ["orders"] });
+      qc.invalidateQueries({ queryKey: ["attendance"] });
+      if (ch.state !== "joined" && ch.state !== "joining") ch.subscribe();
+    };
+    document.addEventListener("visibilitychange", onWake);
+    window.addEventListener("online", onWake);
     return () => {
+      document.removeEventListener("visibilitychange", onWake);
+      window.removeEventListener("online", onWake);
       supabase.removeChannel(ch);
       window.removeEventListener("pointerdown", unlock);
       window.removeEventListener("keydown", unlock);
@@ -203,6 +216,7 @@ function Layout() {
         </div>
         <div className="grid gap-1 border-t p-3">
           <Button variant="ghost" className="h-12 justify-start text-base" onClick={() => { setMenuOpen(false); void enableNotifs(); }}><Bell className="h-5 w-5" />{t("notifications")}</Button>
+          <Button asChild variant="ghost" className="h-12 justify-start text-base"><a href={`https://wa.me/${COMPANY_WHATSAPP}`} target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)}><MessageCircle className="h-5 w-5" />{t("contact_admin")}</a></Button>
           <Button variant="ghost" className="h-12 justify-start text-base" onClick={() => { setMenuOpen(false); nav({ to: "/reset-password" }); }}><KeyRound className="h-5 w-5" />{t("password")}</Button>
           <Button variant="ghost" className="h-12 justify-start text-base text-destructive" onClick={async () => { await supabase.auth.signOut(); qc.clear(); nav({ to: "/auth" }); }}><LogOut className="h-5 w-5" />{t("logout")}</Button>
         </div>

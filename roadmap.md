@@ -8,3 +8,5 @@
 - [x] AI WhatsApp customer messages from product photo + brief, learning from sent messages.
 - [ ] Automatic sending from the company WhatsApp number — needs WhatsApp Business connection from the owner.
 - [x] Excel / PDF / print on orders, inventory, visits, payroll.
+- [x] Company WhatsApp number as default report target + "contact management" menu button.
+- [x] Refresh/reconnect live updates when the phone wakes or comes back online.
